@@ -645,13 +645,11 @@ Document
 | **重绘（Repaint）** | 修改视觉属性（color、background 等） | 中（会触发合成） | 批量修改样式 |
 | **合成（Composite）** | 修改 transform、opacity | 低（GPU 加速） | 优先使用这两个属性 |
 
-## 六、后续阶段与优化点
+## 六、后续阶段
 
-页面首次渲染完成后，浏览器还会继续处理各种交互、资源加载和性能优化任务。这些后续阶段同样对用户体验至关重要。
+页面首次渲染完成后，浏览器还会继续处理各种交互和资源加载
 
-### 1. 资源加载与预加载策略
-
-#### 1.1 资源加载时机
+### 1. 资源加载时机
 
 在 HTML 解析过程中，遇到以下资源会触发额外请求：
 
@@ -665,77 +663,71 @@ Document
 **关键点：**
 - **同步 JS 会阻塞 DOM 解析**：遇到 `<script>` 标签时，浏览器会暂停 DOM 解析，下载并执行脚本
 - **CSS 会阻塞渲染**：必须等待 CSS 解析完成才能构建渲染树
+- CSS 不会阻塞 JS 的下载，但会阻塞 JS 的执行; JS 会阻塞 HTML 的解析
 - **图片不会阻塞渲染**：图片加载是异步的，但会影响页面布局（如果未设置尺寸）
 
-#### 1.2 资源预加载策略
+**JavaScript 解析与执行流程：**
 
-**DNS 预解析（DNS Prefetch）：**
-```html
-<link rel="dns-prefetch" href="https://cdn.example.com">
+**1. HTML 解析阶段（document.readyState = 'loading'）**
+- 浏览器创建 Document 对象并解析 HTML
+- 将解析到的元素和文本节点添加到文档中
+- 此时 `document.readyState` 为 `'loading'`
+
+**2. 同步脚本执行（阻塞解析）**
+- 遇到**没有 `async` 和 `defer` 的 `<script>`** 时：
+  - 暂停 HTML 解析
+  - 下载并执行脚本（行内或外部）
+  - 脚本执行完成后继续解析
+- **特点**：
+  - 可以使用 `document.write()` 插入内容
+  - 可以访问 `script` 标签之前的 DOM 内容
+  - 常用于定义函数和注册事件处理程序
+
+**3. 异步脚本执行（async）**
+- 遇到**设置了 `async` 的 `<script>`** 时：
+  - 开始下载脚本（不阻塞解析）
+  - HTML 解析继续进行
+  - 脚本下载完成后立即执行（可能在解析完成前）
+- **特点**：
+  - **禁止使用 `document.write()`**
+  - 可以访问自己 `script` 标签和之前的 DOM 元素
+  - 多个 `async` 脚本执行顺序不确定
+
+**4. 文档解析完成（document.readyState = 'interactive'）**
+- HTML 解析完成，`document.readyState` 变为 `'interactive'`
+- **延迟脚本（defer）执行**：
+  - 所有 `defer` 脚本按在文档中出现的顺序执行
+  - 可以访问完整的文档树
+  - **禁止使用 `document.write()`**
+- **触发 `DOMContentLoaded` 事件**：
+  - 表示 DOM 已完全解析
+  - 此时可以安全地操作 DOM
+
+**5. 资源加载完成（document.readyState = 'complete'）**
+- 等待图片、字体等资源加载完成
+- 等待所有异步脚本执行完成
+- `document.readyState` 变为 `'complete'`
+- **触发 `window.load` 事件**：
+  - 表示页面所有资源都已加载完成
+
+**执行时机对比：**
 ```
-提前解析域名，减少后续请求的 DNS 查询时间。
-
-**预连接（Preconnect）：**
-```html
-<link rel="preconnect" href="https://api.example.com" crossorigin>
+HTML 解析中 → 同步脚本（阻塞）→ 继续解析
+           ↓
+        async 脚本（并行下载，下载完立即执行）
+           ↓
+    解析完成 → defer 脚本（按顺序执行）→ DOMContentLoaded
+           ↓
+    资源加载完成 → load 事件
 ```
-提前建立 TCP 连接和 TLS 握手，适用于需要频繁请求的第三方域名。
-
-**预加载（Preload）：**
-```html
-<link rel="preload" href="font.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="preload" href="critical.css" as="style">
-<link rel="preload" href="main.js" as="script">
-```
-提前加载关键资源，优先级高于普通资源加载。
-
-**预获取（Prefetch）：**
-```html
-<link rel="prefetch" href="next-page.html">
-```
-在浏览器空闲时预加载可能需要的资源（如下一页内容）。
-
-#### 1.3 JavaScript 加载优化
-
-**defer 属性：**
-```html
-<script defer src="app.js"></script>
-```
-- 脚本下载**不阻塞** DOM 解析
-- 脚本执行**延迟到** DOM 解析完成后、`DOMContentLoaded` 事件之前
-- 多个 `defer` 脚本按顺序执行
-
-**async 属性：**
-```html
-<script async src="analytics.js"></script>
-```
-- 脚本下载**不阻塞** DOM 解析
-- 脚本下载完成后**立即执行**（可能在 DOM 解析完成前）
-- 多个 `async` 脚本执行顺序不确定
-
-**动态加载：**
-```javascript
-// 动态创建 script 标签
-const script = document.createElement('script');
-script.src = 'app.js';
-script.async = true;
-document.head.appendChild(script);
-```
-
-**模块化加载：**
-```html
-<script type="module" src="app.js"></script>
-```
-ES6 模块默认是 `defer` 行为，且支持 `async`。
 
 ### 2. JavaScript 执行与事件处理
 
-#### 2.1 JavaScript 引擎执行流程
+**JavaScript 引擎执行流程：**
 
 **执行上下文（Execution Context）：**
 - **全局执行上下文**：页面加载时创建
 - **函数执行上下文**：函数调用时创建
-- **Eval 执行上下文**：`eval()` 执行时创建
 
 **调用栈（Call Stack）：**
 - JavaScript 是单线程的，只有一个调用栈
@@ -764,380 +756,8 @@ ES6 模块默认是 `defer` 行为，且支持 `async`。
 3. 执行一个宏任务
 4. 重复步骤 2-3
 
-#### 2.2 DOM 操作优化
-
-**批量修改 DOM：**
-```javascript
-// ❌ 不好：多次触发回流
-for (let i = 0; i < 1000; i++) {
-  element.style.width = i + 'px';
-}
-
-// ✅ 好：使用 DocumentFragment
-const fragment = document.createDocumentFragment();
-for (let i = 0; i < 1000; i++) {
-  const div = document.createElement('div');
-  fragment.appendChild(div);
-}
-element.appendChild(fragment);
-
-// ✅ 好：使用虚拟 DOM（React、Vue）
-```
-
-**避免强制同步布局：**
-```javascript
-// ❌ 不好：强制同步布局
-element.style.width = '100px';
-const width = element.offsetWidth; // 触发回流
-element.style.height = width + 'px';
-
-// ✅ 好：先读取后修改
-const width = element.offsetWidth;
-element.style.width = '100px';
-element.style.height = width + 'px';
-```
-
-**使用 requestAnimationFrame：**
-```javascript
-// ✅ 优化动画性能
-function animate() {
-  // 修改样式
-  element.style.transform = `translateX(${x}px)`;
-  x += 1;
-  requestAnimationFrame(animate);
-}
-requestAnimationFrame(animate);
-```
-
-#### 2.3 事件处理优化
-
-**事件委托（Event Delegation）：**
-```javascript
-// ❌ 不好：为每个元素绑定事件
-document.querySelectorAll('.item').forEach(item => {
-  item.addEventListener('click', handleClick);
-});
-
-// ✅ 好：事件委托
-document.addEventListener('click', (e) => {
-  if (e.target.matches('.item')) {
-    handleClick(e);
-  }
-});
-```
-
-**防抖（Debounce）：**
-```javascript
-function debounce(func, wait) {
-  let timeout;
-  return function(...args) {
-    clearTimeout(timeout);
-    timeout = setTimeout(() => func.apply(this, args), wait);
-  };
-}
-
-// 使用场景：搜索输入、窗口 resize
-const handleSearch = debounce((query) => {
-  // 搜索逻辑
-}, 300);
-```
-
-**节流（Throttle）：**
-```javascript
-function throttle(func, wait) {
-  let lastTime = 0;
-  return function(...args) {
-    const now = Date.now();
-    if (now - lastTime >= wait) {
-      lastTime = now;
-      func.apply(this, args);
-    }
-  };
-}
-
-// 使用场景：滚动事件、鼠标移动
-const handleScroll = throttle(() => {
-  // 滚动处理逻辑
-}, 100);
-```
-
-### 3. 连接管理与网络协议优化
-
-#### 3.1 HTTP/1.1 优化
-
-**Keep-Alive 连接复用：**
-- 默认启用 `Connection: keep-alive`
-- 同一个 TCP 连接可以发送多个 HTTP 请求
-- 减少 TCP 握手和 TLS 握手的开销
-
-**域名分片（Domain Sharding）：**
-```html
-<!-- 突破浏览器同域连接数限制（6-8个） -->
-<img src="https://cdn1.example.com/image1.jpg">
-<img src="https://cdn2.example.com/image2.jpg">
-<img src="https://cdn3.example.com/image3.jpg">
-```
-**注意：** HTTP/2 已不需要此优化，反而会增加 DNS 查询。
-
-#### 3.2 HTTP/2 特性
-
-**多路复用（Multiplexing）：**
-- 单个 TCP 连接可以并行发送多个请求
-- 解决了 HTTP/1.1 的队头阻塞问题
-- 请求和响应可以交错传输
-
-**头部压缩（HPACK）：**
-- 使用 HPACK 算法压缩 HTTP 头部
-- 减少重复头部字段的传输
-- 显著降低头部大小
-
-**服务器推送（Server Push）：**
-```http
-Link: </style.css>; rel=preload; as=style
-```
-服务器可以主动推送资源给客户端，无需客户端请求。
-
-**二进制分帧：**
-- 将 HTTP 消息分解为更小的帧
-- 帧可以交错传输，提高效率
-
-#### 3.3 HTTP/3 特性
-
-**基于 QUIC 协议：**
-- 基于 UDP 而非 TCP
-- 内置加密（TLS 1.3）
-- 减少连接建立时间
-
-**改进的多路复用：**
-- 解决了 TCP 的队头阻塞问题
-- 即使某个流的数据包丢失，其他流不受影响
-
-**连接迁移：**
-- 切换网络时保持连接（如 WiFi 切换到移动网络）
-
-### 4. 内存管理与性能监控
-
-#### 4.1 内存泄漏预防
-
-**常见内存泄漏场景：**
-
-1. **未清理的事件监听器：**
-```javascript
-// ❌ 不好
-element.addEventListener('click', handler);
-
-// ✅ 好：及时清理
-element.addEventListener('click', handler);
-// 组件卸载时
-element.removeEventListener('click', handler);
-```
-
-2. **闭包引用：**
-```javascript
-// ❌ 不好：闭包持有大对象引用
-function createHandler() {
-  const largeData = new Array(1000000).fill(0);
-  return function() {
-    // largeData 无法被垃圾回收
-  };
-}
-
-// ✅ 好：使用后置 null
-function createHandler() {
-  const largeData = new Array(1000000).fill(0);
-  return function() {
-    // 使用 largeData
-    largeData = null; // 解除引用
-  };
-}
-```
-
-3. **定时器未清理：**
-```javascript
-// ❌ 不好
-const timer = setInterval(() => {}, 1000);
-
-// ✅ 好：及时清理
-const timer = setInterval(() => {}, 1000);
-clearInterval(timer);
-```
-
-4. **DOM 引用未清理：**
-```javascript
-// ❌ 不好
-const elements = document.querySelectorAll('.item');
-
-// ✅ 好：使用后置 null
-const elements = document.querySelectorAll('.item');
-// 使用后
-elements = null;
-```
-
-#### 4.2 性能监控指标
-
-**核心 Web 指标（Core Web Vitals）：**
-
-1. **LCP（Largest Contentful Paint）**：最大内容绘制
-   - 测量加载性能
-   - 良好：< 2.5 秒
-
-2. **FID（First Input Delay）**：首次输入延迟
-   - 测量交互性
-   - 良好：< 100 毫秒
-
-3. **CLS（Cumulative Layout Shift）**：累积布局偏移
-   - 测量视觉稳定性
-   - 良好：< 0.1
-
-**其他重要指标：**
-
-- **FCP（First Contentful Paint）**：首次内容绘制
-- **TTI（Time to Interactive）**：可交互时间
-- **TBT（Total Blocking Time）**：总阻塞时间
-- **Speed Index**：速度指数
-
-**性能监控 API：**
-
-```javascript
-// Performance API
-const perfData = performance.getEntriesByType('navigation')[0];
-console.log('DNS 查询时间:', perfData.domainLookupEnd - perfData.domainLookupStart);
-console.log('TCP 连接时间:', perfData.connectEnd - perfData.connectStart);
-console.log('请求响应时间:', perfData.responseEnd - perfData.requestStart);
-console.log('DOM 解析时间:', perfData.domInteractive - perfData.responseEnd);
-console.log('页面加载时间:', perfData.loadEventEnd - perfData.fetchStart);
-
-// Resource Timing API
-const resources = performance.getEntriesByType('resource');
-resources.forEach(resource => {
-  console.log(resource.name, resource.duration);
-});
-
-// Web Vitals
-import { getCLS, getFID, getLCP } from 'web-vitals';
-getCLS(console.log);
-getFID(console.log);
-getLCP(console.log);
-```
-
-### 5. 持续优化策略
-
-#### 5.1 代码分割与懒加载
-
-**路由懒加载：**
-```javascript
-// React
-const Home = React.lazy(() => import('./Home'));
-const About = React.lazy(() => import('./About'));
-
-// Vue
-const Home = () => import('./Home.vue');
-```
-
-**组件懒加载：**
-```javascript
-// 按需加载组件
-const HeavyComponent = React.lazy(() => import('./HeavyComponent'));
-
-<Suspense fallback={<Loading />}>
-  <HeavyComponent />
-</Suspense>
-```
-
-**图片懒加载：**
-```html
-<img src="placeholder.jpg" data-src="real-image.jpg" loading="lazy">
-```
-
-#### 5.2 缓存策略
-
-**浏览器缓存：**
-- **强缓存**：`Cache-Control`、`Expires`
-- **协商缓存**：`ETag`、`Last-Modified`
-
-**Service Worker 缓存：**
-```javascript
-// 缓存策略
-self.addEventListener('fetch', (event) => {
-  event.respondWith(
-    caches.match(event.request).then((response) => {
-      return response || fetch(event.request);
-    })
-  );
-});
-```
-
-**HTTP 缓存头设置：**
-```http
-Cache-Control: public, max-age=31536000  # 静态资源：长期缓存
-Cache-Control: no-cache                  # HTML：不缓存
-Cache-Control: private, max-age=3600     # 用户相关：短期缓存
-```
-
-#### 5.3 构建优化
-
-**代码压缩：**
-- JavaScript：UglifyJS、Terser
-- CSS：cssnano
-- HTML：html-minifier
-
-**Tree Shaking：**
-- 移除未使用的代码
-- 支持 ES6 模块的打包工具（Webpack、Rollup、Vite）
-
-**代码分割：**
-```javascript
-// Webpack
-module.exports = {
-  optimization: {
-    splitChunks: {
-      chunks: 'all',
-      cacheGroups: {
-        vendor: {
-          test: /[\\/]node_modules[\\/]/,
-          name: 'vendors',
-        },
-      },
-    },
-  },
-};
-```
-
-**资源压缩：**
-- Gzip / Brotli 压缩
-- 图片压缩和格式优化
-- 字体子集化（只包含使用的字符）
-
-### 6. 优化检查清单
-
-**网络层面：**
-- [ ] 使用 CDN 加速静态资源
-- [ ] 启用 HTTP/2 或 HTTP/3
-- [ ] 配置合理的缓存策略
-- [ ] 压缩资源（Gzip/Brotli）
-- [ ] 使用 DNS 预解析和预连接
-
-**渲染层面：**
-- [ ] 内联关键 CSS（Critical CSS）
-- [ ] 延迟加载非关键 CSS
-- [ ] 使用 `defer` 或 `async` 加载脚本
-- [ ] 优化图片格式和大小
-- [ ] 减少 DOM 层级和节点数量
-
-**JavaScript 层面：**
-- [ ] 代码分割和懒加载
-- [ ] 使用事件委托
-- [ ] 防抖和节流优化
-- [ ] 避免内存泄漏
-- [ ] 使用 `requestAnimationFrame` 优化动画
-
-**监控与测试：**
-- [ ] 使用 Lighthouse 进行性能测试
-- [ ] 监控 Core Web Vitals
-- [ ] 使用 Chrome DevTools 分析性能
-- [ ] 定期进行性能审计
-
 # 当面试官问我前端可以做的性能优化有哪些
+
 [参考文档](https://juejin.cn/post/7194400984490049573#heading-41)
 
 ## 回答思路
