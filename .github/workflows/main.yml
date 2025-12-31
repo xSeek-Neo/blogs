@@ -1,0 +1,75 @@
+name: Publish And Deploy
+run-name: Github Actions Deploy
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+
+      # 下载代码
+    - name: Checkout
+      uses: actions/checkout@v4
+
+      # 设置NODE版本
+    - name: Set up Node
+      uses: actions/setup-node@v4
+      with:
+        node-version: 14
+        cache: 'npm'
+
+      # 打包构建
+    - name: Install Dependent Node Pkgs
+      run: npm install
+
+    - name: Build
+      run: sh ./scripts/build.sh
+
+    - name: 压缩代码
+      run: tar -zcvf release.tgz  dist
+
+    - name: Create Release
+      id: create_release
+      uses: ncipollo/release-action@v1
+      env:
+        GITHUB_TOKEN: ${{secrets.TOKEN}}
+      with:
+        # artifacts: "release.tgz, scripts/*.sh .github/**/*"
+        artifacts: "release.tgz"
+        bodyFile: "README.md"
+        token: ${{ secrets.TOKEN }}
+
+    - name: Upload Release Asset
+      id: upload_release_asset
+      uses: softprops/action-gh-release@v1
+      if: startsWith(github.ref, 'refs/tags/')
+      env:
+        GITHUB_TOKEN: ${{secrets.TOKEN}}
+      with:
+        files: |
+          release.tgz
+        # scripts/*.sh
+
+    - name: console
+      run: |-
+         echo ${{ steps.vars.outputs.tag }}
+         echo ${{github.ref_name}}
+
+    # - name: Delply
+    #   uses: appleboy/ssh-action@master
+    #   with:
+    #     host: ${{secrets.HOST}}
+    #     username: ${{secrets.USERNAME}}
+    #     password: ${{secrets.PASSWORD}}
+    #     port: ${{secrets.PORT}}
+    #     script: |-
+    #       cd /root/realword-nextjs
+    #       wget https://github.com/blog/dist/releases/latest/download/release.tgz -O release.tgz
+    #       tar zcvf release.tgz
+    #       npm install --production
+    #       pm2 reload pm2.config.json
+
+

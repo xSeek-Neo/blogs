@@ -1,0 +1,46 @@
+name: vuepress-deploy
+run-name: Github Actions Deploy
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      # 下载代码
+    - name: Checkout
+      uses: actions/checkout@v4
+
+      # 设置NODE版本
+    - name: Set up Node
+      uses: actions/setup-node@v4
+      with:
+        node-version: 14
+
+      # 打包构建
+    - name: Install Dependent Node Pkgs
+      run: npm install
+
+    - name: Build
+      run: yarn run docs:build
+
+    - name: Init new repo in dist folder and commit generated files
+      run: |-
+        cd docs/.vuepress/dist
+        git init
+        git add .
+        git config --local user.email "352671309@qq.com"
+        git config --local user.name "Ellis"
+        git config --local init.defaultBranch main
+        git commit -am 'deploy'
+
+    - name: Force push to destination branch
+      uses: ad-m/github-push-action@v0.8.0
+      with:
+        github_token: ${{ secrets.TOKEN }}
+        # this might change depending on whether you are publishing a site for a normal repo or a user/organization repo
+        branch: main
+        force: true
+        repository: xsSeek/docs
+        directory: ./docs/.vuepress/dist

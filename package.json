@@ -1,0 +1,30 @@
+{
+  "name": "blog",
+  "version": "0.0.1",
+  "description": "个人博客",
+  "main": "index.js",
+  "license": "MIT",
+  "devDependencies": {
+    "@commitlint/cli": "^17.7.1",
+    "@commitlint/config-conventional": "^17.7.0",
+    "@vuepress/plugin-active-header-links": "^1.9.10",
+    "@vuepress/plugin-back-to-top": "^1.9.10",
+    "@vuepress/plugin-google-analytics": "^1.9.10",
+    "@vuepress/plugin-medium-zoom": "^1.9.10",
+    "@vuepress/plugin-nprogress": "^1.9.10",
+    "@vuepress/plugin-pwa": "^1.9.10",
+    "vuepress": "^1.9.10",
+    "vuepress-plugin-code-copy": "^1.0.6",
+    "vuepress-plugin-flowchart": "^1.5.0"
+  },
+  "scripts": {
+    "dev": "vuepress dev docs",
+    "docs:build": "vuepress build docs",
+    "deploy": "bash scripts/deploy-gh.sh",
+    "homepage": "https://xsSeek.github.io"
+  },
+  "dependencies": {
+    "markdown-it-disable-url-encode": "^1.0.1",
+    "moment": "^2.29.4"
+  }
+}
