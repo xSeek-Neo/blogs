@@ -9,8 +9,6 @@ URL 解析与处理
     ↓
 查找浏览器缓存（强缓存）
     ↓
-Service Worker 拦截（如果有）
-    ↓
 DNS 解析
     ↓
 建立 TCP 连接
@@ -67,97 +65,72 @@ TLS 握手（HTTPS）
 **在发起网络请求之前，浏览器会先检查缓存：**
 
 **缓存查找顺序：**
-1. **Service Worker 缓存**（如果已注册 Service Worker）
-2. **HTTP 缓存**（浏览器缓存）
-   - **Memory Cache**：内存缓存，关闭标签页后失效
-   - **Disk Cache**：磁盘缓存，持久化存储
+1. **Memory Cache**：内存缓存，关闭标签页后失效
+2. **Disk Cache**：磁盘缓存，持久化存储
 
 **缓存判断逻辑：**
-- **如果资源未缓存**：发起新请求
-- **如果已缓存，检查是否新鲜**：
-  - **足够新鲜**：直接使用缓存，**跳过网络请求**，跳转到资源解析步骤
-  - **不够新鲜**：携带缓存验证信息（`If-None-Match`、`If-Modified-Since`）向服务器发起验证请求
+- **未缓存**：发起新请求
+- **已缓存且新鲜**：直接使用缓存，**跳过网络请求**
+- **已缓存但过期**：携带验证信息（`If-None-Match`、`If-Modified-Since`）发起协商缓存请求
 
 **缓存控制机制：**
-- **HTTP/1.0**：使用 `Expires` 头，值为一个绝对时间表示缓存新鲜日期
-- **HTTP/1.1**：使用 `Cache-Control` 头，支持多个指令，用逗号分隔
+- **HTTP/1.0**：`Expires` 头（绝对时间）
+- **HTTP/1.1**：`Cache-Control` 头（推荐使用）
 
-**Cache-Control 完整字段说明：**
-
-**缓存时间控制：**
-- `max-age=<seconds>`：资源在缓存中的最大存活时间（秒），从请求时间开始计算
-  - 示例：`Cache-Control: max-age=3600`（缓存 1 小时）
-- `s-maxage=<seconds>`：共享缓存（如 CDN、代理服务器）的最大存活时间，优先级高于 `max-age`
-  - 示例：`Cache-Control: max-age=3600, s-maxage=7200`
-- `max-stale[=<seconds>]`：客户端可以接受过期缓存的最大时间（仅用于请求头）
-
-**缓存位置控制：**
-- `public`：响应可以被任何缓存（浏览器、CDN、代理服务器）缓存
-  - 示例：`Cache-Control: public, max-age=3600`
-- `private`：响应只能被浏览器缓存，不能被共享缓存（CDN、代理）缓存
-  - 示例：`Cache-Control: private, max-age=3600`（用户个人信息等）
-- `no-store`：不缓存任何内容，每次都要从服务器获取
-  - 示例：`Cache-Control: no-store`（敏感数据）
-
-**缓存验证控制：**
-- `no-cache`：每次使用缓存前必须向服务器验证（协商缓存）
-  - 示例：`Cache-Control: no-cache`（需要验证，但可以缓存）
-- `must-revalidate`：缓存过期后必须向服务器验证，不能使用过期缓存
-  - 示例：`Cache-Control: max-age=3600, must-revalidate`
-- `proxy-revalidate`：与 `must-revalidate` 相同，但仅适用于共享缓存
-- `immutable`：资源不会改变，浏览器可以直接使用缓存，无需验证
-  - 示例：`Cache-Control: max-age=31536000, immutable`（带版本号的静态资源）
-
-**缓存更新策略：**
-- `stale-while-revalidate=<seconds>`：允许在后台重新验证时使用过期缓存
-  - 示例：`Cache-Control: max-age=3600, stale-while-revalidate=86400`
-  - 缓存过期后，仍可使用最多 24 小时，同时在后台更新
-- `stale-if-error=<seconds>`：当服务器错误时，可以使用过期缓存
-  - 示例：`Cache-Control: max-age=3600, stale-if-error=86400`
-  - 如果服务器返回 5xx 错误，可以使用最多 24 小时的过期缓存
-
-**其他控制：**
-- `no-transform`：禁止代理服务器修改响应内容（如压缩、转换格式）
-  - 示例：`Cache-Control: no-transform`
-- `only-if-cached`：只使用缓存，不发起网络请求（仅用于请求头）
-
-**常用组合示例：**
-```http
-# 静态资源：长期缓存，可被 CDN 缓存
-Cache-Control: public, max-age=31536000, immutable
-
-# HTML 文件：不缓存，每次都要验证
-Cache-Control: no-cache, must-revalidate
-
-# 用户相关数据：只能浏览器缓存，短期缓存
-Cache-Control: private, max-age=3600
-
-# API 响应：允许使用过期缓存，后台更新
-Cache-Control: max-age=300, stale-while-revalidate=3600
-
-# 敏感数据：完全不缓存
-Cache-Control: no-store, no-cache, must-revalidate
-```
+**Cache-Control 常用指令：**
+- `max-age=<seconds>`：缓存有效期（秒）
+- `public`：可被任何缓存（浏览器、CDN）缓存
+- `private`：仅浏览器缓存，不被共享缓存缓存
+- `no-cache`：使用前必须验证（协商缓存）
+- `no-store`：不缓存，每次从服务器获取
+- `must-revalidate`：过期后必须验证
+- `immutable`：资源不变，无需验证（适用于带版本号的静态资源）
 
 **缓存验证（协商缓存）：**
-- 如果缓存过期，浏览器会发送验证请求头：
-  - `If-None-Match: "etag-value"`：基于 ETag
-  - `If-Modified-Since: Wed, 21 Oct 2015 07:28:00 GMT`：基于 Last-Modified
-- 服务器返回 `304 Not Modified`：使用本地缓存
-- 服务器返回 `200 OK`：返回新资源，更新缓存
+- 验证请求头：`If-None-Match`（ETag）、`If-Modified-Since`（Last-Modified）
+- 服务器响应：`304 Not Modified`（使用缓存）或 `200 OK`（返回新资源）
 
-### 3. Service Worker 拦截（如果有）
+**缓存策略建议：**
 
-**如果页面注册了 Service Worker：**
-- Service Worker 可以拦截网络请求
-- 可以从 Cache API 中返回缓存
-- 可以发起网络请求获取新资源
-- 可以返回自定义响应
+**1. 静态资源（JS/CSS/图片/字体等）**
+```http
+Cache-Control: public, max-age=31536000, immutable
+```
+- 使用文件版本号或 hash（如 `app.abc123.js`）
+- 长期缓存（1年），资源不变时无需验证
 
-**Service Worker 缓存策略：**
-- **Cache First**：优先使用缓存
-- **Network First**：优先使用网络
-- **Stale While Revalidate**：使用缓存，后台更新
+**2. HTML 文件**
+```http
+Cache-Control: no-cache, must-revalidate
+```
+- 不缓存或短期缓存，确保及时获取更新
+- 每次使用前验证，保证内容最新
+
+**3. API 响应（数据接口）**
+```http
+Cache-Control: private, max-age=300, stale-while-revalidate=3600
+```
+- 短期缓存（5分钟），过期后后台更新
+- 使用 `private` 避免共享缓存
+
+**4. 用户相关数据**
+```http
+Cache-Control: private, max-age=3600
+```
+- 仅浏览器缓存，不共享
+- 根据数据更新频率设置缓存时间
+
+**5. 敏感数据**
+```http
+Cache-Control: no-store, no-cache, must-revalidate
+```
+- 完全不缓存，每次从服务器获取
+
+**最佳实践：**
+- 静态资源使用版本号/hash，设置长期缓存
+- HTML 使用协商缓存，确保及时更新
+- API 数据根据更新频率设置合适的缓存时间
+- 利用 `stale-while-revalidate` 提升用户体验
 
 ## 二、网络请求阶段
 
@@ -176,9 +149,57 @@ Cache-Control: no-store, no-cache, must-revalidate
    - 最终返回 IP 地址
    - **可能存在负载均衡，导致每次 IP 不一样**
 
-**DNS 优化：**
-- DNS 预解析：`<link rel="dns-prefetch" href="https://cdn.example.com">`
-- DNS 查询结果会被缓存，减少后续查询时间
+**为什么是逐级查询？**
+
+DNS 采用**分层树状结构**，每个域名服务器只负责自己管辖的域名区域：
+
+1. **根域名服务器（Root DNS）**：全球共 13 组根服务器，负责顶级域名（`.com`、`.org`、`.cn` 等）
+2. **顶级域名服务器（TLD DNS）**：负责二级域名（如 `.com` 下的所有域名）
+3. **权威域名服务器（Authoritative DNS）**：负责具体域名的解析（如 `baidu.com`）
+
+**查询过程（以 `www.baidu.com` 为例）：**
+
+**面试时这样表达：**
+> "当浏览器要访问 www.baidu.com 时，DNS 解析是逐级查询的：
+> 
+> 1. **第一步**：客户端向本地 ISP 的 DNS 服务器发起查询
+> 2. **第二步**：ISP DNS 服务器不知道，就去问根域名服务器："www.baidu.com 的 IP 是多少？"
+> 3. **第三步**：根服务器回答："我不知道具体 IP，但我知道 .com 的服务器地址，你去问它"，然后返回 .com 服务器的地址
+> 4. **第四步**：ISP DNS 去问 .com 服务器："www.baidu.com 的 IP 是多少？"
+> 5. **第五步**：.com 服务器回答："我不知道具体 IP，但我知道 baidu.com 的权威服务器地址，你去问它"
+> 6. **第六步**：ISP DNS 去问 baidu.com 的权威服务器："www.baidu.com 的 IP 是多少？"
+> 7. **第七步**：权威服务器返回最终 IP 地址，比如 39.156.66.10
+> 8. **第八步**：ISP DNS 把 IP 返回给客户端，并缓存这个结果"
+
+**流程图：**
+```
+客户端 → ISP DNS 服务器
+  ↓
+ISP DNS → 根服务器："www.baidu.com 的 IP？"
+  ↓
+根服务器："去问 .com 服务器"（返回 .com 服务器地址）
+  ↓
+ISP DNS → .com 服务器："www.baidu.com 的 IP？"
+  ↓
+.com 服务器："去问 baidu.com 的权威服务器"（返回权威服务器地址）
+  ↓
+ISP DNS → baidu.com 权威服务器："www.baidu.com 的 IP？"
+  ↓
+权威服务器："IP 是 39.156.66.10"
+  ↓
+ISP DNS → 客户端：返回 IP 并缓存
+```
+
+**面试回答要点（三步法）：**
+
+**1. 先说原理：**
+> "DNS 采用分层树状结构，每个服务器只管理自己的域名空间。就像查电话簿，先查省份，再查城市，最后查具体人名"
+
+**2. 再说过程：**
+> "查询时从右到左逐级解析：先问根服务器（.com），再问顶级域名服务器（baidu.com），最后问权威服务器得到 IP"
+
+**3. 最后说优化：**
+> "实际查询中，ISP DNS 服务器会缓存结果，所以大部分情况下不需要每次都走完整流程。而且客户端到 ISP DNS 是递归查询，客户端只发一次请求，后续查询都由 ISP DNS 完成"
 
 **只有当所有本地缓存均未命中时，才会向 DNS 服务器发起真正的网络请求。**
 
@@ -204,8 +225,16 @@ Cache-Control: no-store, no-cache, must-revalidate
    - **连接建立完成**，可以开始传输数据
 
 **为什么需要三次握手？**
-- 确保双方都能发送和接收数据
-- 防止已失效的连接请求报文突然传送到服务器，导致错误
+
+1. **确认双方的发送和接收能力**：确保客户端和服务器都能发送和接收数据
+2. **防止已失效的连接请求**：防止网络延迟导致的过期连接请求被服务器误认为是新连接
+
+**为什么不能是两次？**
+- 两次握手时，服务器无法确认客户端能接收数据
+- 如果客户端发送的 SYN 因网络延迟卡住，客户端会重发。旧请求到达时，两次握手会让服务器误认为是新连接并建立连接，但客户端已关闭，导致服务器一直等待
+
+**为什么不能是四次？**
+- 三次已足够确认双方的双向通信能力，四次是多余的
 
 **TCP 连接复用（Keep-Alive）：**
 - HTTP/1.1 默认启用 `Connection: keep-alive`
@@ -214,37 +243,12 @@ Cache-Control: no-store, no-cache, must-revalidate
 
 ### 3. TLS 握手（仅 HTTPS）
 
-**如果使用的是 HTTPS 协议，在 TCP 建立完成后，还需要进行 TLS 握手：**
+**如果使用的是 HTTPS 协议，在 TCP 建立完成后，还需要进行 TLS 握手才能建立安全连接。**
 
-**TLS 握手过程（简化版）：**
-1. **客户端发送 Client Hello**：
-   - 支持的 TLS 版本
-   - 支持的加密套件列表
-   - 客户端随机数
-
-2. **服务器发送 Server Hello**：
-   - 选择的 TLS 版本
-   - 选择的加密套件
-   - 服务器随机数
-   - **服务器证书**（包含公钥）
-
-3. **客户端验证证书**：
-   - 验证证书的有效性（是否过期、是否被吊销）
-   - 验证证书链（根证书 → 中间证书 → 服务器证书）
-   - 验证域名是否匹配
-
-4. **密钥交换**：
-   - 客户端生成预主密钥（Pre-Master Secret）
-   - 使用服务器公钥加密后发送给服务器
-   - 双方根据随机数和预主密钥生成对称加密密钥
-
-5. **握手完成**：
-   - 双方发送 Finished 消息，确认握手完成
-   - 后续通信使用对称加密
-
-**TLS 握手的性能影响：**
-- TLS 握手需要额外的 1-2 个 RTT（往返时间）
-- 可以通过 TLS 会话复用（Session Resumption）减少握手时间
+**为什么需要 TLS 握手？**
+- **验证服务器证书**：确保连接的是真正的目标服务器，防止中间人攻击
+- **协商加密算法**：客户端和服务器协商出双方都支持的加密套件
+- **协商对称加密密钥**：通过非对称加密（公钥/私钥）安全地协商出对称加密的共享密钥
 
 ### 4. 浏览器组装 HTTP 请求报文
 
@@ -291,15 +295,36 @@ GET /index.html HTTP/1.1
 
 ### 2. 请求处理流程
 
-**根据请求类型，服务器采用不同的处理策略：**
+**典型的服务器架构（Nginx 作为反向代理）：**
 
-- **静态资源**：直接返回文件系统中的静态文件（HTML、CSS、JS、图片等）
-- **反向代理**：将请求转发到后端服务器（负载均衡、服务发现）
-- **动态请求**：转发给后端应用服务器（Node.js / Java / Python / PHP 等）
-  - 执行相应的业务逻辑
-  - 访问数据库或缓存获取数据
-  - 进行数据计算和处理
-  - 生成 HTML 或 JSON 响应
+```
+客户端请求 → Nginx（反向代理服务器）
+              ↓
+        ┌─────┴─────┐
+        ↓           ↓
+   静态资源      动态请求
+   (直接返回)    (转发后端)
+                  ↓
+           后端应用服务器
+           (Node.js/Java等)
+                  ↓
+              数据库/缓存
+```
+
+**处理流程：**
+
+1. **静态资源请求**
+   - Nginx 直接返回文件系统中的静态文件（HTML、CSS、JS、图片等）
+   - 无需转发到后端，响应最快
+
+2. **动态请求（需要后端处理）**
+   - Nginx 作为**反向代理**，将请求转发到后端应用服务器
+   - 后端应用服务器处理：
+     - 执行业务逻辑
+     - 访问数据库或缓存获取数据
+     - 进行数据计算和处理
+     - 生成 HTML 或 JSON 响应
+   - 响应通过 Nginx 返回给客户端
 
 ### 3. 返回 HTTP 响应
 
@@ -669,12 +694,6 @@ Document
 <link rel="prefetch" href="next-page.html">
 ```
 在浏览器空闲时预加载可能需要的资源（如下一页内容）。
-
-**预渲染（Prerender）：**
-```html
-<link rel="prerender" href="https://example.com/next-page">
-```
-提前渲染整个页面（已废弃，不推荐使用）。
 
 #### 1.3 JavaScript 加载优化
 
@@ -1504,14 +1523,14 @@ module.exports = {
    - 使用 `React.memo`、`React.PureComponent`、`shouldComponentUpdate`
 
 2. **避免内联函数和对象**
-   ```jsx
+```jsx
    // ❌ 不好
-   <button onClick={() => handleClick()}>button1</button>
-   
+<button onClick={() => handleClick()}>button1</button>
+
    // ✅ 好
-   <button onClick={handleClick}>button1</button>
-   const handleClick = () => {};
-   ```
+<button onClick={handleClick}>button1</button>
+const handleClick = () => {};
+```
 
 3. **使用 Fragment 减少层级**
    ```jsx
@@ -1533,12 +1552,12 @@ module.exports = {
    - 使用 `useCallback` 缓存函数
 
 6. **代码分割和懒加载**
-   ```jsx
-   const MyComponent = React.lazy(() => import('./MyComponent'));
-   
-   <React.Suspense fallback={<Spinner />}>
+```jsx
+const MyComponent = React.lazy(() => import('./MyComponent'));
+
+  <React.Suspense fallback={<Spinner />}>
      <MyComponent />
-   </React.Suspense>
+  </React.Suspense>
    ```
 
 ### Vue 优化
@@ -1550,8 +1569,8 @@ module.exports = {
 
 2. **路由懒加载**
    ```javascript
-   const Home = () => import('./Home.vue');
-   ```
+const Home = () => import('./Home.vue');
+```
 
 3. **第三方插件按需引入**
    ```javascript
