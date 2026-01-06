@@ -777,9 +777,96 @@ directives，将被合并为同一个对象。两个对象键名冲突时，取�
 
 ## vue template 模板到解析层真实 DOM 的过程
 
-## v-model 手动实现
+## v-model 原理
 
-[v-model 手动实现](https://segmentfault.com/a/1190000012264050)
+> `v-model` 是 Vue 提供的语法糖，用于实现双向数据绑定。它的本质是 `:value` + `@input` 的组合。
+
+### 一、本质
+
+`v-model` 是一个**语法糖**，自动绑定 `value` 属性和 `input` 事件（或 `change` 事件，取决于元素类型）。
+
+```vue
+<!-- 使用 v-model -->
+<input v-model="message" />
+
+<!-- 等价于 -->
+<input 
+  :value="message" 
+  @input="message = $event.target.value"
+/>
+```
+
+### 二、自定义组件中的 v-model
+
+#### Vue2 实现
+
+默认绑定 `value` prop 和 `input` 事件：
+
+```vue
+<!-- 父组件 -->
+<CustomInput v-model="message" />
+<!-- 等价于 -->
+<CustomInput :value="message" @input="message = $event" />
+```
+
+```vue
+<!-- 子组件 -->
+<template>
+  <input :value="value" @input="$emit('input', $event.target.value)" />
+</template>
+<script>
+export default {
+  props: ['value']
+}
+</script>
+```
+
+#### Vue3 实现
+
+默认绑定 `modelValue` prop 和 `update:modelValue` 事件：
+
+```vue
+<!-- 父组件 -->
+<CustomInput v-model="message" />
+<!-- 等价于 -->
+<CustomInput :modelValue="message" @update:modelValue="message = $event" />
+```
+
+```vue
+<!-- 子组件 -->
+<template>
+  <input :value="modelValue" @input="$emit('update:modelValue', $event.target.value)" />
+</template>
+<script setup>
+defineProps(['modelValue'])
+defineEmits(['update:modelValue'])
+</script>
+```
+
+### 三、Vue3 改进
+
+#### 多个 v-model
+
+Vue3 支持在同一个组件上使用多个 `v-model`：
+
+```vue
+<!-- 父组件 -->
+<UserName v-model:first-name="first" v-model:last-name="last" />
+<!-- 等价于 -->
+<UserName 
+  :first-name="first" 
+  @update:first-name="first = $event"
+  :last-name="last" 
+  @update:last-name="last = $event"
+/>
+```
+
+### 总结
+
+- **本质**：`:value` + `@input`（或 `@change`）的语法糖
+- **Vue2**：默认绑定 `value` prop 和 `input` 事件
+- **Vue3**：默认绑定 `modelValue` prop 和 `update:modelValue` 事件，支持多个 `v-model`
+- **编译时转换**：Vue 在编译阶段将 `v-model` 转换为对应的属性和事件绑定
 
 ## $nextTick 原理
 
@@ -1635,6 +1722,7 @@ console.log(route.state.id)
     router.matcher = newRouter.matcher
  }
 ```
+
 ## vuex刷新数据会丢失吗 怎么解决 终极方案数据持久化
 
  - vuex肯定会重新获取数据，页面也会丢失数据
