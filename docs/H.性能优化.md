@@ -1128,7 +1128,7 @@ module.exports = {
 ```
 
 ### 5. CDN 加载第三方模块
-将 `node_modules` 中的第三方库通过 CDN 加载，减少打包体积。
+将 `node_modules` 中的第三方库通过 CDN 加载，减少打包体积
 
 ### 6. 多线程打包
 使用 `thread-loader` 或 `happypack` 加速构建。
