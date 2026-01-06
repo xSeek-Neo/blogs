@@ -594,3 +594,7 @@ onmessage = (event) => {
 
 **适用场景：** WebSocket 相关面试、技术分享、代码审查
 
+
+## 说说TCP为什么需要三次握手和四次挥手
+
+https://vue3js.cn/interview/http/handshakes_waves.html#%E4%B8%80%E3%80%81%E4%B8%89%E6%AC%A1%E6%8F%A1%E6%89%8B
