@@ -1,12 +1,19 @@
 # 性能监控
 
 [监控课程]('https://www.bilibili.com/video/BV1m9s9zGEWg/?vd_source=7970f0400c1d2c12e45cad987cd7f798&spm_id_from=333.788.videopod.episodes')
+
 [性能监控]('https://juejin.cn/post/7586482860104613915') 
 // https://github.com/Teernage/performance-monitor
+
+[错误监控]("https://juejin.cn/post/7580674010837549102")
+// https://github.com/Teernage/error-monitor
+
+[用户行为监控]("https://juejin.cn/post/7583612559443279923")
+// https://github.com/Teernage/user-behavior-monitor
+
+
 https://github.com/lizuncong/web-monitor/blob/master/src/monitor-sdk/lib/blankScreen.js
 
-https://github.com/Jameszws/monitorjs_horse
-[性能监控WEBFUNNY]('https://github.com/a597873885/webfunny_monitor')
 
 ## 收益
 参与前端监控平台/监控SDK的架构设计与开发 为公司业务赋能。独立设计和开发监控SDK，对前端页面的性能指标、错误信息、行为信息进行收集 采用合理的方式进行上报
