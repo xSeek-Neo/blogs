@@ -83,3 +83,5 @@ useLayoutEffect(() => {
 1.组建之间复用状态逻辑比较困难
 2.复杂组建会变的难以理解 类组建会有很多复杂的生命周期等问题
 3.难以理解的class
+
+https://blog.csdn.net/qq_16546829/article/details/137056845
