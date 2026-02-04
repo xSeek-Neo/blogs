@@ -1,13 +1,17 @@
-### React 面试题
+# React 面试题
 
-#### useEffect 和 useLayoutEffect 有什么区别
+## React 闭包问题
+
+ - 闭包是指一个函数可以访问其定义时所在的词法作用域中的变量
+
+## useEffect 和 useLayoutEffect 有什么区别
 
 - useEffect 的 callback， 准确来说是同步调用的， 会等主线程任务执行完成，DOM更新， JS 执行完整 视图绘制完成 才执行
 - useLayoutEffect 的 cb，是同步执行 执行时时机是DOM更新之后。 视图绘制完成之前 这个时间可以更方便的修改DOM
 
 - 使用：如果需要修改DOM 使用useLayoutEffect 其他都是用 useEffect
 
-#### useInsertionEffect
+### useInsertionEffect
 
 - useInsertionEffect 比 useLayoutEffect 更早。useInsertionEffect执行时， DOM海没有更新。
 - 本质上 useInsertionEffect 主要是解决CSS-in-js 在渲染中注入样式的性能问题。
@@ -17,10 +21,6 @@
 [react saga 使用](https://www.jianshu.com/p/b17d8bec13f3)
 
 
-## React Hooks 使用
-
-[React Hooks使用](https://github.com/scott8013/react-hooks-demo)
-
 ## 21个React性能优化技巧
 
 [21个React性能优化技巧](https://www.infoq.cn/article/KVE8xtRs-uPphptq5LUz)
@@ -29,8 +29,7 @@
 ## React错误边界处理
 [React错误边界处理](https://github.com/bvaughn/react-error-boundary)
 
-
-### HOOK模拟生命周期
+## HOOK模拟生命周期
 ![原型链](~@imgs/react-lifeCycle.png)
 
 1. 挂载阶段 constructor --> getDerivedStateFormProps --> render --> componentDidMount
