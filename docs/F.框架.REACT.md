@@ -2,7 +2,71 @@
 
 ## React 闭包问题
 
- - 闭包是指一个函数可以访问其定义时所在的词法作用域中的变量
+### 什么是闭包
+
+闭包就是: 函数“记住”了它定义时的词法作用域。函数在别处执行时，仍然可以访问当时作用域里的变量，因为这些变量被函数引用而不会被释放。
+
+### React 中的闭包陷阱
+
+在 React 函数组件中，每次渲染都会重新执行函数，创建新的闭包。当 `useEffect`、`useCallback`、`useMemo` 等 Hook 的回调函数**闭包了某次渲染时的 state/props**，且依赖项未正确设置时，就会拿到**过期的值**，即「陈旧闭包」（stale closure）。
+
+### 解决方案
+
+#### 1. 函数式更新 setState（推荐）
+
+```tsx
+useEffect(() => {
+  const timer = setInterval(() => {
+    setCount(prev => prev + 1); // 始终基于最新状态
+  }, 1000);
+  return () => clearInterval(timer);
+}, []);
+```
+
+#### 2. 正确设置依赖项
+
+```tsx
+useEffect(() => {
+  const handler = () => console.log(keyword);
+  window.addEventListener('scroll', handler);
+  return () => window.removeEventListener('scroll', handler);
+}, [keyword]); // keyword 变化时重新订阅
+```
+
+#### 3. 用 useRef 保存最新值（需要「最新值」但不触发重新执行 effect）
+
+```tsx
+function Search() {
+  const [keyword, setKeyword] = useState('');
+  const keywordRef = useRef(keyword);
+  keywordRef.current = keyword; // 每次渲染都更新
+
+  useEffect(() => {
+    const handler = () => {
+      console.log(keywordRef.current); // 始终是最新值
+    };
+    window.addEventListener('scroll', handler);
+    return () => window.removeEventListener('scroll', handler);
+  }, []); // 只需订阅一次
+
+  return <input value={keyword} onChange={e => setKeyword(e.target.value)} />;
+}
+```
+
+#### 4. useCallback 避免子组件拿到旧的回调
+
+```tsx
+const handleClick = useCallback(() => {
+  doSomething(count);
+}, [count]); // 依赖 count，每次 count 变化都会生成新函数
+```
+
+### 小结
+
+- React 函数组件每次渲染都是新闭包，Hook 回调会闭包当时的 props/state
+- 依赖项要写全，否则容易产生陈旧闭包
+- 能用函数式更新 `setState` 的尽量用，不依赖闭包里的 state
+- 需要「只订阅一次但读到最新值」时，用 `useRef` 存最新值
 
 ## useEffect 和 useLayoutEffect 有什么区别
 
