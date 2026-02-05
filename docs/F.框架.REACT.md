@@ -10,63 +10,166 @@
 
 在 React 函数组件中，每次渲染都会重新执行函数，创建新的闭包。当 `useEffect`、`useCallback`、`useMemo` 等 Hook 的回调函数**闭包了某次渲染时的 state/props**，且依赖项未正确设置时，就会拿到**过期的值**，即「陈旧闭包」（stale closure）。
 
-### 解决方案
+#### 常见陷阱
 
-#### 1. 函数式更新 setState（推荐）
-
-```tsx
-useEffect(() => {
-  const timer = setInterval(() => {
-    setCount(prev => prev + 1); // 始终基于最新状态
-  }, 1000);
-  return () => clearInterval(timer);
-}, []);
-```
-
-#### 2. 正确设置依赖项
+##### 1. useState：异步与批量更新导致“拿到旧值”
 
 ```tsx
-useEffect(() => {
-  const handler = () => console.log(keyword);
-  window.addEventListener('scroll', handler);
-  return () => window.removeEventListener('scroll', handler);
-}, [keyword]); // keyword 变化时重新订阅
-```
-
-#### 3. 用 useRef 保存最新值（需要「最新值」但不触发重新执行 effect）
-
-```tsx
-function Search() {
-  const [keyword, setKeyword] = useState('');
-  const keywordRef = useRef(keyword);
-  keywordRef.current = keyword; // 每次渲染都更新
-
-  useEffect(() => {
-    const handler = () => {
-      console.log(keywordRef.current); // 始终是最新值
-    };
-    window.addEventListener('scroll', handler);
-    return () => window.removeEventListener('scroll', handler);
-  }, []); // 只需订阅一次
-
-  return <input value={keyword} onChange={e => setKeyword(e.target.value)} />;
+export default function Hooks() {
+  const [count, setCount] = useState(0);
+  const add = () => {
+    setCount(count + 1);
+    console.log(count, '修改前的值');
+  };
+  return (
+    <div>
+      <span>{count}</span>
+      <button onClick={add}> + </button>
+    </div>
+  );
 }
 ```
 
-#### 4. useCallback 避免子组件拿到旧的回调
+问题：点击后 UI 更新了，但日志仍是上一次的值。原因是状态更新是异步/批量的，当前闭包里仍是旧值。
+
+解决：使用函数式更新 + `useRef` 获取最新值。
 
 ```tsx
-const handleClick = useCallback(() => {
-  doSomething(count);
-}, [count]); // 依赖 count，每次 count 变化都会生成新函数
+export default function Hooks() {
+  const [count, setCount] = useState(0);
+  const countRef = useRef(0);
+  countRef.current = count;
+
+  const add = () => {
+    setCount(prev => prev + 1);
+    setTimeout(() => {
+      console.log(count, '修改前的值');
+      console.log(countRef.current, '修改后的值');
+    }, 0);
+  };
+
+  return (
+    <div>
+      <span>{count}</span>
+      <button onClick={add}> + </button>
+    </div>
+  );
+}
 ```
 
-### 小结
+##### 2. useState：连续多次 setState 只生效最后一次
 
-- React 函数组件每次渲染都是新闭包，Hook 回调会闭包当时的 props/state
-- 依赖项要写全，否则容易产生陈旧闭包
-- 能用函数式更新 `setState` 的尽量用，不依赖闭包里的 state
-- 需要「只订阅一次但读到最新值」时，用 `useRef` 存最新值
+```tsx
+const add = () => {
+  console.log('value1: ', count);
+  setCount(count + 1);
+  console.log('value2: ', count);
+  setCount(count + 2);
+  console.log('value3: ', count);
+  setCount(count + 3);
+  console.log('value4: ', count);
+};
+```
+
+问题：传普通值时，只会生效最后一次更新。
+
+解决：用函数式更新，保证每次基于上一次计算。
+
+```tsx
+const add = () => {
+  console.log('value1: ', count);
+  setCount(prev => prev + 1);
+  console.log('value2: ', count);
+  setCount(prev => prev + 2);
+  console.log('value3: ', count);
+  setCount(prev => prev + 3);
+  console.log('value4: ', count);
+};
+```
+
+##### 3. useEffect：过期闭包导致定时器读到旧值
+
+```tsx
+export default function Hooks3() {
+  const [count, setCount] = useState(0);
+
+  useEffect(() => {
+    setInterval(() => {
+      setCount(count + 1);
+    }, 1000);
+  }, []);
+
+  useEffect(() => {
+    setInterval(() => {
+      console.log(`Count: ${count}`);
+    }, 1000);
+  }, []);
+
+  return <span>{count}</span>;
+}
+```
+
+问题：`count` 一直停在 1。原因是 effect 只执行一次，闭包里读的是首次渲染的快照。
+
+解决：补齐依赖 + 清理副作用，或改用函数式更新。
+
+```tsx
+export default function Hooks() {
+  const [count, setCount] = useState(0);
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCount(prev => prev + 1);
+    }, 1000);
+    return () => clearInterval(timer);
+  }, []);
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      console.log(`Count: ${count}`);
+    }, 1000);
+    return () => clearInterval(timer);
+  }, [count]);
+
+  return <span>{count}</span>;
+}
+```
+
+补充：多个副作用应拆成多个 `useEffect`；effect 返回的函数会在卸载或依赖变化时执行，用来清理副作用。
+
+##### 4. useCallback：依赖缺失导致子组件拿到旧值
+
+```tsx
+function Child(props) {
+  const log = useCallback(() => {
+    console.log(props.count, '子组件打印的props');
+  }, []);
+  return (
+    <>
+      count: {props.count}
+      <button onClick={log}> 打印 </button>
+    </>
+  );
+}
+```
+
+问题：`props.count` 变化了，但 `log` 里仍是旧值，因为依赖数组为空。
+
+解决：补齐依赖。
+
+```tsx
+const log = useCallback(() => {
+  console.log(props.count, '子组件打印的props');
+}, [props.count]);
+```
+
+#### 小结
+
+- 闭包陷阱本质是：回调函数捕获了旧的渲染快照
+- 优先用函数式更新避免读取旧 state
+- 依赖项必须写全，或用 `useRef` 保存最新值
+- 副作用记得清理，避免重复订阅或计时器泄漏
+
 
 ## useEffect 和 useLayoutEffect 有什么区别
 
