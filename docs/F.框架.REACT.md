@@ -148,3 +148,11 @@ useLayoutEffect(() => {
 3.难以理解的class
 
 https://blog.csdn.net/qq_16546829/article/details/137056845
+
+
+## tsx/jsx 转换成普通js语法过程
+
+1.@babel/parse 把jsx 转成 AST语法
+2.@babel/traverse 去做转换
+3.@babel/generator 把AST 生成新的代码（低版本浏览器兼容代码  或 React.createElement语法）
+4. React.createElement 返回的就是vDom (虚拟DOM)
