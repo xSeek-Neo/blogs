@@ -1,0 +1,45 @@
+.wrapper {
+  max-width: 72rem;
+  margin: 0 auto 2rem;
+  padding: 0 10px;
+}
+
+.about {
+  box-sizing: border-box;
+  padding: 24px;
+  border: 1px solid var(--home-feature-card-stroke);
+  border-radius: 10px;
+  background: var(--home-feature-card-gradient);
+}
+
+.title {
+  margin: 0 0 1rem;
+  font-size: 1.5rem;
+  font-weight: 700;
+  line-height: 1.4;
+}
+
+.title del {
+  opacity: 0.55;
+}
+
+.about :global(.rp-callout) {
+  margin: 0 0 1.5rem;
+}
+
+.copyright,
+.icp {
+  margin: 0.5rem 0 0;
+  color: var(--rp-c-text-2);
+  font-size: 0.875rem;
+  line-height: 1.6;
+}
+
+.icp a {
+  color: var(--rp-c-link);
+  text-decoration: none;
+}
+
+.icp a:hover {
+  text-decoration: underline;
+}

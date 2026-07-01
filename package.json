@@ -11,7 +11,8 @@
     "preview": "rspress preview"
   },
   "dependencies": {
-    "@rspress/core": "^2.0.14"
+    "@rspress/core": "^2.0.14",
+    "@rstack-dev/doc-ui": "^1.14.5"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",

@@ -8,20 +8,70 @@
   --rp-c-brand-lighter: #ff7524;
   --rp-c-brand-tint: rgba(255, 94, 0, 0.07);
 
+  --rp-page-grid-color: color-mix(in srgb, var(--rp-c-divider-light) 35%, transparent);
+  --rp-page-grid-size: 16px;
+
   --rp-home-hero-secondary-color: #ff5e00;
+  --rp-home-hero-title-color: transparent;
+  --rp-home-hero-title-bg: linear-gradient(
+    90deg,
+    var(--rp-c-brand-dark) 0%,
+    var(--rp-c-brand-dark) 30%,
+    var(--rp-home-hero-secondary-color) 100%
+  );
+  --rp-home-background-bg:
+    radial-gradient(42.12% 56.13% at 100% 0%, rgba(255, 94, 0, 0.1) 0%, transparent 100%),
+    radial-gradient(42.01% 79.63% at 52.86% 0%, rgba(255, 117, 36, 0.2) 0%, transparent 100%),
+    radial-gradient(79.67% 58.09% at 0% 0%, rgba(255, 112, 77, 0.2) 0%, transparent 100%);
+  --rp-home-feature-bg: linear-gradient(135deg, #fff, #f9f9f980);
+
+  --home-feature-card-stroke: #8fa1b94d;
+  --home-feature-card-gradient: linear-gradient(135deg, #fff, #f9f9f980);
+  --home-feature-title-color: #0b0c0e;
+  --home-feature-desc-color: #8fa1b9;
+  --home-feature-url-color: #f93920;
+
+  --home-features-intro-color: #6b7075;
 }
 
-.rp-home-hero__image {
-  animation: hero-float 3s ease-in-out infinite;
+body::before {
+  content: '';
+  position: fixed;
+  z-index: -1;
+  top: calc(var(--rp-nav-height, 64px) + var(--rp-banner-height, 0px));
+  right: 0;
+  bottom: 0;
+  left: 0;
+  pointer-events: none;
+  background-color: var(--rp-c-bg);
+  background-image:
+    linear-gradient(var(--rp-page-grid-color) 1px, transparent 1px),
+    linear-gradient(90deg, var(--rp-page-grid-color) 1px, transparent 1px);
+  background-size: var(--rp-page-grid-size) var(--rp-page-grid-size);
 }
 
-@keyframes hero-float {
-  0%,
-  100% {
-    transform: translateY(0);
-  }
+.rp-home-background {
+  filter: none;
+  height: 100vh;
+  min-height: 1000px;
+}
 
-  50% {
-    transform: translateY(-14px);
-  }
+.rp-search-button {
+  min-width: 220px;
+  width: 220px;
+}
+
+:where(html.rp-dark) {
+  --rp-page-grid-color: color-mix(in srgb, var(--rp-c-divider-light) 28%, transparent);
+  --rp-home-background-bg:
+    radial-gradient(42.12% 56.13% at 100% 0%, rgba(12, 29, 72, 0.55) 0%, transparent 100%),
+    radial-gradient(55.81% 87.78% at 48.37% 0%, rgba(0, 0, 0, 0.45) 0%, transparent 89.55%),
+    radial-gradient(122.65% 88.24% at 0% 0%, rgba(52, 38, 138, 0.5) 0%, transparent 100%);
+  --rp-home-feature-bg: linear-gradient(135deg, #fff0, #ffffff08);
+  --home-feature-card-stroke: #23272f;
+  --home-feature-card-gradient: linear-gradient(135deg, #fff0, #ffffff08);
+  --home-feature-title-color: #fff;
+  --home-feature-desc-color: #8fa1b9;
+  --home-feature-url-color: #ff704d;
+  --home-features-intro-color: #c6cacd;
 }
