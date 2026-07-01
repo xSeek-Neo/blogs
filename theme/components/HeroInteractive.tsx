@@ -1,10 +1,10 @@
-import { normalizeImagePath } from '@rspress/core/runtime';
-import { CodeBlock, IconGithub, IconMoon, IconSearch, IconSun } from '@rspress/core/theme';
+import { normalizeImagePath } from '@rspress/core/runtime'
+import { CodeBlock, IconGithub, IconMoon, IconSearch, IconSun } from '@rspress/core/theme'
 
-import styles from './HeroInteractive.module.css';
+import styles from './HeroInteractive.module.css'
 
-const LOGO_SRC = normalizeImagePath('/rspress-logo.svg');
-const PROJECT_TITLE = '葵花寶典';
+const LOGO_SRC = normalizeImagePath('/rspress-logo.svg')
+const PROJECT_TITLE = '葵花寶典'
 
 export function HeroInteractive() {
   return (
@@ -96,5 +96,5 @@ export function HeroInteractive() {
         </div>
       </div>
     </div>
-  );
+  )
 }

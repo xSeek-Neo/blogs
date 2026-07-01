@@ -122,11 +122,11 @@ document.addEventListener('visibilitychange', function () {
   if (document.visibilityState === 'hidden') {
     const header = {
       type: 'application/x-www-form-urlencoded',
-    };
-    const blob = new Blob([JSON.stringify({ name: 'Dendi', age: 88 })], header);
-    navigator.sendBeacon('http://localhost:5200/tracker', blob);
+    }
+    const blob = new Blob([JSON.stringify({ name: 'Dendi', age: 88 })], header)
+    navigator.sendBeacon('http://localhost:5200/tracker', blob)
   }
-});
+})
 ```
 
 ### 重写浏览器的方法 pushState 和 replaceState
@@ -212,57 +212,57 @@ function installTracker() {
     <ul class="main"></ul>
     <script lang="ts">
       window.onload = () => {
-        const mainEl = document.querySelector('.main');
-        const list = new Array(50).fill(' ');
-        const fragment = document.createDocumentFragment();
+        const mainEl = document.querySelector('.main')
+        const list = new Array(50).fill(' ')
+        const fragment = document.createDocumentFragment()
         const getLiEl = (_, index) => {
-          const liEl = document.createElement('li');
-          liEl.innerHTML = `<img class="img" style="height: 80px"></img><span>${index + 1}</span>`;
-          liEl.style.cssText = `color: red; font-weight: bold; font-size: 24px`;
-          liEl.className = 'list-item';
+          const liEl = document.createElement('li')
+          liEl.innerHTML = `<img class="img" style="height: 80px"></img><span>${index + 1}</span>`
+          liEl.style.cssText = `color: red; font-weight: bold; font-size: 24px`
+          liEl.className = 'list-item'
           liEl.setAttribute(
             'src',
             'https://p2.img.cctvpic.com/photoAlbum/page/performance/img/2022/4/1/1648804913581_50.jpg',
-          );
-          liEl.setAttribute('index', index + 1);
-          return fragment.appendChild(liEl);
-        };
-        list.forEach(getLiEl);
-        mainEl.append(fragment);
+          )
+          liEl.setAttribute('index', index + 1)
+          return fragment.appendChild(liEl)
+        }
+        list.forEach(getLiEl)
+        mainEl.append(fragment)
 
         let options = {
           root: document.querySelector('.main'),
           // 预先加载 list-item: 上下margin 20, 本身高度80 = 120px 预先加载5 600px = 120px * 5
           rootMargin: '0px 0px 600px 0px',
           threshold: 0.5,
-        };
+        }
 
         const callback = (entries, io) => {
           entries.forEach(({ target, isIntersecting }) => {
             if (isIntersecting) {
-              const index = target.getAttribute('index') * 1;
-              const imgUri = target.getAttribute('src');
-              const img = target.querySelector('.img');
-              img.setAttribute('src', imgUri);
-              target.removeAttribute('src');
-              target.removeAttribute('index');
-              console.log(index);
+              const index = target.getAttribute('index') * 1
+              const imgUri = target.getAttribute('src')
+              const img = target.querySelector('.img')
+              img.setAttribute('src', imgUri)
+              target.removeAttribute('src')
+              target.removeAttribute('index')
+              console.log(index)
               // 停止观察
-              io.unobserve(target);
+              io.unobserve(target)
 
               // 关闭观察器
               // io.disconnect()
             }
-          });
-        };
+          })
+        }
 
-        let observer = new IntersectionObserver(callback, options);
-        const liEls = document.querySelectorAll('.list-item');
+        let observer = new IntersectionObserver(callback, options)
+        const liEls = document.querySelectorAll('.list-item')
         // 开始监听
         liEls.forEach((li) => {
-          observer.observe(li);
-        });
-      };
+          observer.observe(li)
+        })
+      }
     </script>
   </body>
 </html>

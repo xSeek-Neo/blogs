@@ -1065,10 +1065,10 @@ HTML 解析中 → 同步脚本（阻塞）→ 继续解析
 **动态加载脚本**
 
 ```javascript
-const script = document.createElement('script');
-script.src = 'app.js';
-script.async = true;
-document.head.appendChild(script);
+const script = document.createElement('script')
+script.src = 'app.js'
+script.async = true
+document.head.appendChild(script)
 ```
 
 ### 3. 减少 DOM 操作
@@ -1078,29 +1078,29 @@ document.head.appendChild(script);
 ```javascript
 // ❌ 不好：多次触发回流
 for (let i = 0; i < 1000; i++) {
-  element.style.width = i + 'px';
+  element.style.width = i + 'px'
 }
 
 // ✅ 好：使用 DocumentFragment
-const fragment = document.createDocumentFragment();
+const fragment = document.createDocumentFragment()
 for (let i = 0; i < 1000; i++) {
-  const div = document.createElement('div');
-  fragment.appendChild(div);
+  const div = document.createElement('div')
+  fragment.appendChild(div)
 }
-element.appendChild(fragment);
+element.appendChild(fragment)
 ```
 
 **避免强制同步布局**
 
 ```javascript
 // ❌ 不好：强制同步布局
-element.style.width = '100px';
-const width = element.offsetWidth; // 触发回流
+element.style.width = '100px'
+const width = element.offsetWidth // 触发回流
 
 // ✅ 好：先读取后修改
-const width = element.offsetWidth;
-element.style.width = '100px';
-element.style.height = width + 'px';
+const width = element.offsetWidth
+element.style.width = '100px'
+element.style.height = width + 'px'
 ```
 
 ### 4. 使用虚拟列表
@@ -1126,15 +1126,15 @@ element.style.height = width + 'px';
 ```javascript
 // ❌ 不好：为每个元素绑定事件
 document.querySelectorAll('.item').forEach((item) => {
-  item.addEventListener('click', handleClick);
-});
+  item.addEventListener('click', handleClick)
+})
 
 // ✅ 好：事件委托
 document.addEventListener('click', (e) => {
   if (e.target.matches('.item')) {
-    handleClick(e);
+    handleClick(e)
   }
-});
+})
 ```
 
 ### 2. 防抖（Debounce）和节流（Throttle）
@@ -1143,11 +1143,11 @@ document.addEventListener('click', (e) => {
 
 ```javascript
 function debounce(func, wait) {
-  let timeout;
+  let timeout
   return function (...args) {
-    clearTimeout(timeout);
-    timeout = setTimeout(() => func.apply(this, args), wait);
-  };
+    clearTimeout(timeout)
+    timeout = setTimeout(() => func.apply(this, args), wait)
+  }
 }
 ```
 
@@ -1155,14 +1155,14 @@ function debounce(func, wait) {
 
 ```javascript
 function throttle(func, wait) {
-  let lastTime = 0;
+  let lastTime = 0
   return function (...args) {
-    const now = Date.now();
+    const now = Date.now()
     if (now - lastTime >= wait) {
-      lastTime = now;
-      func.apply(this, args);
+      lastTime = now
+      func.apply(this, args)
     }
-  };
+  }
 }
 ```
 
@@ -1172,17 +1172,17 @@ function throttle(func, wait) {
 
 ```javascript
 // main.js
-const worker = new Worker('worker.js');
-worker.postMessage({ data: largeData });
+const worker = new Worker('worker.js')
+worker.postMessage({ data: largeData })
 worker.onmessage = (e) => {
-  console.log('计算结果:', e.data);
-};
+  console.log('计算结果:', e.data)
+}
 
 // worker.js
 self.onmessage = (e) => {
-  const result = heavyCalculation(e.data);
-  self.postMessage(result);
-};
+  const result = heavyCalculation(e.data)
+  self.postMessage(result)
+}
 ```
 
 ### 4. 计算结果缓存
@@ -1198,11 +1198,11 @@ self.onmessage = (e) => {
 ```javascript
 // ✅ 使用 requestAnimationFrame
 function animate() {
-  element.style.transform = `translateX(${x}px)`;
-  x += 1;
-  requestAnimationFrame(animate);
+  element.style.transform = `translateX(${x}px)`
+  x += 1
+  requestAnimationFrame(animate)
 }
-requestAnimationFrame(animate);
+requestAnimationFrame(animate)
 ```
 
 ### 6. 避免内存泄漏
@@ -1242,12 +1242,12 @@ requestAnimationFrame(animate);
 
 ```javascript
 // ❌ 不好：多次触发重绘
-element.style.color = 'red';
-element.style.backgroundColor = 'blue';
-element.style.border = '1px solid black';
+element.style.color = 'red'
+element.style.backgroundColor = 'blue'
+element.style.border = '1px solid black'
 
 // ✅ 好：一次性修改
-element.className = 'new-style';
+element.className = 'new-style'
 ```
 
 ### 3. 使用 CSS3 硬件加速
@@ -1333,11 +1333,11 @@ element.className = 'new-style';
 
 ```javascript
 // 路由懒加载
-const Home = React.lazy(() => import('./Home'));
-const About = React.lazy(() => import('./About'));
+const Home = React.lazy(() => import('./Home'))
+const About = React.lazy(() => import('./About'))
 
 // 组件懒加载
-const HeavyComponent = React.lazy(() => import('./HeavyComponent'));
+const HeavyComponent = React.lazy(() => import('./HeavyComponent'))
 ```
 
 ### 2. Tree Shaking
@@ -1366,7 +1366,7 @@ module.exports = {
       },
     },
   },
-};
+}
 ```
 
 ### 5. CDN 加载第三方模块
@@ -1410,7 +1410,7 @@ const handleClick = () => {};
 
    ```jsx
    {
-     items.map((item) => <Item key={item.id} data={item} />);
+     items.map((item) => <Item key={item.id} data={item} />)
    }
    ```
 
@@ -1421,11 +1421,11 @@ const handleClick = () => {};
 6. **代码分割和懒加载**
 
 ```jsx
-const MyComponent = React.lazy(() => import('./MyComponent'));
+const MyComponent = React.lazy(() => import('./MyComponent'))
 
-<React.Suspense fallback={<Spinner />}>
+;<React.Suspense fallback={<Spinner />}>
   <MyComponent />
-</React.Suspense>;
+</React.Suspense>
 ```
 
 ### Vue 优化
@@ -1476,9 +1476,9 @@ const Home = () => import('./Home.vue');
 7. **及时销毁事件和定时器**
    ```javascript
    onBeforeUnmount(() => {
-     clearInterval(timer);
-     bus.$off('event');
-   });
+     clearInterval(timer)
+     bus.$off('event')
+   })
    ```
 
 ---

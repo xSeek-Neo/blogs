@@ -71,11 +71,11 @@ All examples below follow the same structure in `theme/index.tsx`. The key parts
 
 ```tsx
 // theme/index.tsx
-import { Layout as OriginalLayout } from '@rspress/core/theme-original';
-export * from '@rspress/core/theme-original';
+import { Layout as OriginalLayout } from '@rspress/core/theme-original'
+export * from '@rspress/core/theme-original'
 
 export function Layout() {
-  return <OriginalLayout beforeNavTitle={<MyLogo />} />;
+  return <OriginalLayout beforeNavTitle={<MyLogo />} />
 }
 ```
 
@@ -83,8 +83,8 @@ export function Layout() {
 
 ```tsx
 // theme/index.tsx
-import { Layout as OriginalLayout } from '@rspress/core/theme-original';
-export * from '@rspress/core/theme-original';
+import { Layout as OriginalLayout } from '@rspress/core/theme-original'
+export * from '@rspress/core/theme-original'
 
 export function Layout() {
   return (
@@ -93,7 +93,7 @@ export function Layout() {
       bottom={<footer>© 2025 My Company</footer>}
       afterOutline={<div>Related resources</div>}
     />
-  );
+  )
 }
 ```
 
@@ -101,17 +101,17 @@ export function Layout() {
 
 ```tsx
 // theme/index.tsx
-import { Layout as OriginalLayout } from '@rspress/core/theme-original';
-import { useLang } from '@rspress/core/runtime';
-export * from '@rspress/core/theme-original';
+import { Layout as OriginalLayout } from '@rspress/core/theme-original'
+import { useLang } from '@rspress/core/runtime'
+export * from '@rspress/core/theme-original'
 
 function LocalizedBanner() {
-  const lang = useLang();
-  return <div>{lang === 'zh' ? '欢迎' : 'Welcome'}</div>;
+  const lang = useLang()
+  return <div>{lang === 'zh' ? '欢迎' : 'Welcome'}</div>
 }
 
 export function Layout() {
-  return <OriginalLayout top={<LocalizedBanner />} />;
+  return <OriginalLayout top={<LocalizedBanner />} />
 }
 ```
 
@@ -121,15 +121,15 @@ The `components` slot accepts a `Record<string, React.ComponentType>` to overrid
 
 ```tsx
 // theme/index.tsx
-import { Layout as OriginalLayout } from '@rspress/core/theme-original';
-export * from '@rspress/core/theme-original';
+import { Layout as OriginalLayout } from '@rspress/core/theme-original'
+export * from '@rspress/core/theme-original'
 
 function CustomH1({ children }: { children: React.ReactNode }) {
-  return <h1 style={{ borderBottom: '2px solid var(--rp-c-brand)' }}>{children}</h1>;
+  return <h1 style={{ borderBottom: '2px solid var(--rp-c-brand)' }}>{children}</h1>
 }
 
 export function Layout() {
-  return <OriginalLayout components={{ h1: CustomH1 }} />;
+  return <OriginalLayout components={{ h1: CustomH1 }} />
 }
 ```
 

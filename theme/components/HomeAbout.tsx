@@ -1,6 +1,6 @@
-import { Callout } from '@rspress/core/theme-original';
+import { Callout } from '@rspress/core/theme-original'
 
-import styles from './HomeAbout.module.css';
+import styles from './HomeAbout.module.css'
 
 export function HomeAbout() {
   return (
@@ -21,5 +21,5 @@ export function HomeAbout() {
         </p>
       </section>
     </div>
-  );
+  )
 }

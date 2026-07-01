@@ -49,8 +49,8 @@ Minimal setup:
 
 ```tsx
 // theme/index.tsx
-import './index.css'; // optional
-export * from '@rspress/core/theme-original';
+import './index.css' // optional
+export * from '@rspress/core/theme-original'
 ```
 
 **Critical import rule**: Inside `theme/` files, always import from `@rspress/core/theme-original`. The path `@rspress/core/theme` resolves to your own `theme/index.tsx`, which causes circular imports. (In `docs/` MDX files, `@rspress/core/theme` is fine — it correctly points to your custom theme.)
@@ -81,7 +81,7 @@ Override CSS custom properties for brand colors, backgrounds, text, code blocks,
 // rspress.config.ts
 export default defineConfig({
   globalStyles: path.join(__dirname, 'styles/custom.css'),
-});
+})
 ```
 
 > **Full variable list**: Read `references/css-variables.md` for all available CSS variables with light/dark defaults.
@@ -104,11 +104,11 @@ Inject content at specific positions in the layout without replacing built-in co
 
 ```tsx
 // theme/index.tsx
-import { Layout as OriginalLayout } from '@rspress/core/theme-original';
-export * from '@rspress/core/theme-original';
+import { Layout as OriginalLayout } from '@rspress/core/theme-original'
+export * from '@rspress/core/theme-original'
 
 export function Layout() {
-  return <OriginalLayout beforeNavTitle={<MyLogo />} bottom={<CustomFooter />} />;
+  return <OriginalLayout beforeNavTitle={<MyLogo />} bottom={<CustomFooter />} />
 }
 ```
 
@@ -130,8 +130,8 @@ rspress eject DocFooter # eject to theme/components/DocFooter/
 Then re-export in `theme/index.tsx` (named export takes precedence over the wildcard):
 
 ```tsx
-export * from '@rspress/core/theme-original';
-export { DocFooter } from './components/DocFooter';
+export * from '@rspress/core/theme-original'
+export { DocFooter } from './components/DocFooter'
 ```
 
 > **Component list & patterns**: Read `references/eject-components.md` for available components, workflow, and common patterns.
@@ -145,38 +145,38 @@ Rspress has 27 built-in icons used across the UI. You can replace any of them by
 **Icon type**: Each icon is a React component or a URL string:
 
 ```ts
-import type { FC, SVGProps } from 'react';
-type Icon = FC<SVGProps<SVGSVGElement>> | string;
+import type { FC, SVGProps } from 'react'
+type Icon = FC<SVGProps<SVGSVGElement>> | string
 ```
 
 **Example 1** — Replace an icon with a custom SVG component:
 
 ```tsx
 // theme/index.tsx
-export * from '@rspress/core/theme-original';
+export * from '@rspress/core/theme-original'
 
 // Named export overrides the wildcard — replaces the GitHub icon site-wide
 export const IconGithub = (props: React.SVGProps<SVGSVGElement>) => (
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" {...props}>
     <path d="M12 2C6.477 2 2 6.484 2 12.017c0 ..." fill="currentColor" />
   </svg>
-);
+)
 ```
 
 **Example 2** — Use an SVGR import:
 
 ```tsx
 // theme/index.tsx
-export * from '@rspress/core/theme-original';
+export * from '@rspress/core/theme-original'
 
-import CustomGithubIcon from './icons/github.svg?react';
-export const IconGithub = CustomGithubIcon;
+import CustomGithubIcon from './icons/github.svg?react'
+export const IconGithub = CustomGithubIcon
 ```
 
 **Using `SvgWrapper` in MDX or custom components**:
 
 ```mdx
-import { SvgWrapper, IconGithub } from '@rspress/core/theme';
+import { SvgWrapper, IconGithub } from '@rspress/core/theme'
 
 <SvgWrapper icon={IconGithub} width={24} height={24} />
 ```
@@ -198,7 +198,7 @@ export default defineConfig({
     path.join(__dirname, 'components', 'BackToTop.tsx'),
     [path.join(__dirname, 'components', 'Analytics.tsx'), { trackingId: '...' }],
   ],
-});
+})
 ```
 
 ---

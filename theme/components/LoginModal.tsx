@@ -1,59 +1,59 @@
-import { useEffect, useId, useRef, useState, type FormEvent } from 'react';
+import { useEffect, useId, useRef, useState, type FormEvent } from 'react'
 
-import { getDefaultUsername, verifyCredentials } from '../utils/auth';
-import styles from './LoginModal.module.css';
+import { getDefaultUsername, verifyCredentials } from '../utils/auth'
+import styles from './LoginModal.module.css'
 
 interface LoginModalProps {
-  open: boolean;
-  onClose: () => void;
-  onSuccess: () => void;
+  open: boolean
+  onClose: () => void
+  onSuccess: () => void
 }
 
 export function LoginModal({ open, onClose, onSuccess }: LoginModalProps) {
-  const titleId = useId();
-  const passwordRef = useRef<HTMLInputElement>(null);
-  const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
+  const titleId = useId()
+  const passwordRef = useRef<HTMLInputElement>(null)
+  const [password, setPassword] = useState('')
+  const [error, setError] = useState('')
 
   useEffect(() => {
     if (!open) {
-      return;
+      return
     }
 
-    setPassword('');
-    setError('');
-    passwordRef.current?.focus();
-  }, [open]);
+    setPassword('')
+    setError('')
+    passwordRef.current?.focus()
+  }, [open])
 
   useEffect(() => {
     if (!open) {
-      return;
+      return
     }
 
     const onKeyDown = (event: KeyboardEvent) => {
       if (event.key === 'Escape') {
-        onClose();
+        onClose()
       }
-    };
+    }
 
-    window.addEventListener('keydown', onKeyDown);
-    return () => window.removeEventListener('keydown', onKeyDown);
-  }, [open, onClose]);
+    window.addEventListener('keydown', onKeyDown)
+    return () => window.removeEventListener('keydown', onKeyDown)
+  }, [open, onClose])
 
   if (!open) {
-    return null;
+    return null
   }
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
+    event.preventDefault()
 
     if (!verifyCredentials(getDefaultUsername(), password)) {
-      setError('密码错误，请重试');
-      return;
+      setError('密码错误，请重试')
+      return
     }
 
-    onSuccess();
-  };
+    onSuccess()
+  }
 
   return (
     <div className={styles.overlay} onClick={onClose} role="presentation">
@@ -95,8 +95,8 @@ export function LoginModal({ open, onClose, onSuccess }: LoginModalProps) {
               name="password"
               value={password}
               onChange={(event) => {
-                setPassword(event.target.value);
-                setError('');
+                setPassword(event.target.value)
+                setError('')
               }}
               autoComplete="current-password"
               placeholder="请输入密码"
@@ -114,5 +114,5 @@ export function LoginModal({ open, onClose, onSuccess }: LoginModalProps) {
         </form>
       </div>
     </div>
-  );
+  )
 }

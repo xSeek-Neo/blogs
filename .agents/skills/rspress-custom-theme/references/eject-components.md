@@ -50,8 +50,8 @@ Ejected source is placed in `theme/components/<ComponentName>/`.
 
    ```tsx
    // theme/index.tsx
-   export * from '@rspress/core/theme-original';
-   export { DocFooter } from './components/DocFooter';
+   export * from '@rspress/core/theme-original'
+   export { DocFooter } from './components/DocFooter'
    ```
 
    The named export takes precedence over the wildcard re-export, so Rspress uses your custom version.
@@ -64,21 +64,21 @@ The most common eject use case is wrapping the entire app in a context provider 
 
 ```tsx
 // theme/components/Root/index.tsx
-import type { RootProps } from '@rspress/core/theme';
+import type { RootProps } from '@rspress/core/theme'
 
 export function Root({ children }: RootProps) {
   return (
     <ThemeProvider>
       <AnalyticsProvider>{children}</AnalyticsProvider>
     </ThemeProvider>
-  );
+  )
 }
 ```
 
 ```tsx
 // theme/index.tsx
-export * from '@rspress/core/theme-original';
-export { Root } from './components/Root';
+export * from '@rspress/core/theme-original'
+export { Root } from './components/Root'
 ```
 
 ## Common Pattern: Custom Home Page (HomeLayout)
@@ -87,12 +87,12 @@ When the default home page structure (Hero + Features) doesn't meet the design r
 
 ```tsx
 // theme/components/HomeLayout/index.tsx
-import { useSite, useLang } from '@rspress/core/runtime';
+import { useSite, useLang } from '@rspress/core/runtime'
 
 export function HomeLayout() {
-  const site = useSite();
-  const lang = useLang();
-  const { title, description } = site.siteData;
+  const site = useSite()
+  const lang = useLang()
+  const { title, description } = site.siteData
 
   return (
     <div className="custom-home">
@@ -113,14 +113,14 @@ export function HomeLayout() {
         {/* Custom content: testimonials, stats, demos, etc. */}
       </section>
     </div>
-  );
+  )
 }
 ```
 
 ```tsx
 // theme/index.tsx
-export * from '@rspress/core/theme-original';
-export { HomeLayout } from './components/HomeLayout';
+export * from '@rspress/core/theme-original'
+export { HomeLayout } from './components/HomeLayout'
 ```
 
 The named export overrides the built-in `HomeLayout` from the wildcard re-export — no need to eject first.
@@ -131,16 +131,16 @@ If you only need to add content before/after the Hero or Features sections (with
 
 ```tsx
 // theme/components/DocFooter/index.tsx
-import { useFrontmatter } from '@rspress/core/runtime';
+import { useFrontmatter } from '@rspress/core/runtime'
 
 export function DocFooter() {
-  const frontmatter = useFrontmatter();
+  const frontmatter = useFrontmatter()
   return (
     <footer className="custom-doc-footer">
       {frontmatter.author && <span>Author: {frontmatter.author}</span>}
       <a href="https://github.com/...">Edit this page</a>
     </footer>
-  );
+  )
 }
 ```
 

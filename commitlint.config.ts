@@ -1,4 +1,6 @@
-export default {
+import type { UserConfig } from '@commitlint/types'
+
+const config: UserConfig = {
   extends: ['@commitlint/config-conventional'],
   rules: {
     'body-leading-blank': [2, 'always'],
@@ -29,3 +31,5 @@ export default {
     ],
   },
 }
+
+export default config

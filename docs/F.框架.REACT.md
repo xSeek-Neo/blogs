@@ -17,39 +17,39 @@
 ```tsx
 useEffect(() => {
   const timer = setInterval(() => {
-    setCount((prev) => prev + 1); // 始终基于最新状态
-  }, 1000);
-  return () => clearInterval(timer);
-}, []);
+    setCount((prev) => prev + 1) // 始终基于最新状态
+  }, 1000)
+  return () => clearInterval(timer)
+}, [])
 ```
 
 #### 2. 正确设置依赖项
 
 ```tsx
 useEffect(() => {
-  const handler = () => console.log(keyword);
-  window.addEventListener('scroll', handler);
-  return () => window.removeEventListener('scroll', handler);
-}, [keyword]); // keyword 变化时重新订阅
+  const handler = () => console.log(keyword)
+  window.addEventListener('scroll', handler)
+  return () => window.removeEventListener('scroll', handler)
+}, [keyword]) // keyword 变化时重新订阅
 ```
 
 #### 3. 用 useRef 保存最新值（需要「最新值」但不触发重新执行 effect）
 
 ```tsx
 function Search() {
-  const [keyword, setKeyword] = useState('');
-  const keywordRef = useRef(keyword);
-  keywordRef.current = keyword; // 每次渲染都更新
+  const [keyword, setKeyword] = useState('')
+  const keywordRef = useRef(keyword)
+  keywordRef.current = keyword // 每次渲染都更新
 
   useEffect(() => {
     const handler = () => {
-      console.log(keywordRef.current); // 始终是最新值
-    };
-    window.addEventListener('scroll', handler);
-    return () => window.removeEventListener('scroll', handler);
-  }, []); // 只需订阅一次
+      console.log(keywordRef.current) // 始终是最新值
+    }
+    window.addEventListener('scroll', handler)
+    return () => window.removeEventListener('scroll', handler)
+  }, []) // 只需订阅一次
 
-  return <input value={keyword} onChange={(e) => setKeyword(e.target.value)} />;
+  return <input value={keyword} onChange={(e) => setKeyword(e.target.value)} />
 }
 ```
 
@@ -57,8 +57,8 @@ function Search() {
 
 ```tsx
 const handleClick = useCallback(() => {
-  doSomething(count);
-}, [count]); // 依赖 count，每次 count 变化都会生成新函数
+  doSomething(count)
+}, [count]) // 依赖 count，每次 count 变化都会生成新函数
 ```
 
 ### 小结
@@ -228,15 +228,15 @@ useMemo 适合缓存复杂计算后的值
 父组件每次渲染都给子组件传一个新函数，`memo` 会认为 props 变了，从而子组件仍然重渲染：
 
 ```tsx
-import React, { memo, useState } from 'react';
+import React, { memo, useState } from 'react'
 
 const Child = memo(function Child({ onClick }: { onClick: () => void }) {
-  console.log('Child render');
-  return <button onClick={onClick}>child</button>;
-});
+  console.log('Child render')
+  return <button onClick={onClick}>child</button>
+})
 
 export default function Parent() {
-  const [count, setCount] = useState(0);
+  const [count, setCount] = useState(0)
 
   return (
     <div>
@@ -245,26 +245,26 @@ export default function Parent() {
       {/* ❌ 每次 Parent render 都会创建新函数 -> Child 也会 render */}
       <Child onClick={() => console.log('child click')} />
     </div>
-  );
+  )
 }
 ```
 
 用 `useCallback` 让引用稳定后，Parent 因为 `count` 变化而重渲染时，Child 就能更容易跳过渲染：
 
 ```tsx
-import React, { memo, useCallback, useState } from 'react';
+import React, { memo, useCallback, useState } from 'react'
 
 const Child = memo(function Child({ onClick }: { onClick: () => void }) {
-  console.log('Child render');
-  return <button onClick={onClick}>child</button>;
-});
+  console.log('Child render')
+  return <button onClick={onClick}>child</button>
+})
 
 export default function Parent() {
-  const [count, setCount] = useState(0);
+  const [count, setCount] = useState(0)
 
   const handleChildClick = useCallback(() => {
-    console.log('child click');
-  }, []);
+    console.log('child click')
+  }, [])
 
   return (
     <div>
@@ -273,7 +273,7 @@ export default function Parent() {
       {/* ✅ onClick 引用稳定 -> Child 不会被无意义重渲染 */}
       <Child onClick={handleChildClick} />
     </div>
-  );
+  )
 }
 ```
 
@@ -282,38 +282,38 @@ export default function Parent() {
 如果 effect 依赖里有一个“每次 render 都变”的函数，就会导致 effect 反复执行（解绑再绑定）：
 
 ```tsx
-import React from 'react';
+import React from 'react'
 
 export default function Comp() {
   const onResize = () => {
-    console.log('resize');
-  };
+    console.log('resize')
+  }
 
   React.useEffect(() => {
-    window.addEventListener('resize', onResize);
-    return () => window.removeEventListener('resize', onResize);
-  }, [onResize]); // ❌ onResize 每次 render 都是新引用 -> effect 每次都重跑
+    window.addEventListener('resize', onResize)
+    return () => window.removeEventListener('resize', onResize)
+  }, [onResize]) // ❌ onResize 每次 render 都是新引用 -> effect 每次都重跑
 
-  return <div>open console</div>;
+  return <div>open console</div>
 }
 ```
 
 用 `useCallback` 稳定引用后，只有依赖真的变化时才会重新订阅：
 
 ```tsx
-import React from 'react';
+import React from 'react'
 
 export default function Comp() {
   const onResize = React.useCallback(() => {
-    console.log('resize');
-  }, []);
+    console.log('resize')
+  }, [])
 
   React.useEffect(() => {
-    window.addEventListener('resize', onResize);
-    return () => window.removeEventListener('resize', onResize);
-  }, [onResize]); // ✅ 引用稳定 -> 不会无意义重跑
+    window.addEventListener('resize', onResize)
+    return () => window.removeEventListener('resize', onResize)
+  }, [onResize]) // ✅ 引用稳定 -> 不会无意义重跑
 
-  return <div>open console</div>;
+  return <div>open console</div>
 }
 ```
 

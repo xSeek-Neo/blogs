@@ -91,7 +91,7 @@ const evt = new CustomEvent('user:action', {
   detail: { id: 123 },
   bubbles: true,
   cancelable: true,
-});
+})
 ```
 
 - **type**：事件名字符串
@@ -103,20 +103,20 @@ const evt = new CustomEvent('user:action', {
 
 ```js
 document.addEventListener('user:action', (e) => {
-  console.log('收到数据:', e.detail);
-});
+  console.log('收到数据:', e.detail)
+})
 ```
 
 ### 3）派发事件
 
 ```js
-el.dispatchEvent(evt);
+el.dispatchEvent(evt)
 ```
 
 如果 `cancelable: true`，`dispatchEvent()` 的返回值会反映是否被否决：
 
 ```js
-const ok = el.dispatchEvent(evt); // true 表示未被 preventDefault 否决
+const ok = el.dispatchEvent(evt) // true 表示未被 preventDefault 否决
 ```
 
 ---

@@ -1,10 +1,10 @@
-import { useFrontmatter } from '@rspress/core/runtime';
-import { Link, renderHtmlOrText, useLinkNavigate } from '@rspress/core/theme';
-import { useState } from 'react';
+import { useFrontmatter } from '@rspress/core/runtime'
+import { Link, renderHtmlOrText, useLinkNavigate } from '@rspress/core/theme'
+import { useState } from 'react'
 
-import { hasAuthSession, LOGIN_REDIRECT, setAuthSession } from '../utils/auth';
-import { HeroInteractive } from './HeroInteractive';
-import { LoginModal } from './LoginModal';
+import { hasAuthSession, LOGIN_REDIRECT, setAuthSession } from '../utils/auth'
+import { HeroInteractive } from './HeroInteractive'
+import { LoginModal } from './LoginModal'
 
 const DEFAULT_HERO = {
   badge: '',
@@ -13,36 +13,36 @@ const DEFAULT_HERO = {
   tagline: '',
   actions: [],
   image: undefined,
-};
+}
 
-const LOGIN_ACTION_LINK = LOGIN_REDIRECT;
+const LOGIN_ACTION_LINK = LOGIN_REDIRECT
 
 export function HomeHero() {
-  const { frontmatter } = useFrontmatter();
-  const hero = frontmatter?.hero || DEFAULT_HERO;
-  const navigate = useLinkNavigate();
-  const [loginOpen, setLoginOpen] = useState(false);
+  const { frontmatter } = useFrontmatter()
+  const hero = frontmatter?.hero || DEFAULT_HERO
+  const navigate = useLinkNavigate()
+  const [loginOpen, setLoginOpen] = useState(false)
 
   const multiHeroText = hero.text
     ? hero.text
         .toString()
         .split(/\n/g)
         .filter((text) => text !== '')
-    : [];
+    : []
 
   const openLoginOrNavigate = () => {
     if (hasAuthSession()) {
-      navigate(LOGIN_REDIRECT);
-      return;
+      navigate(LOGIN_REDIRECT)
+      return
     }
-    setLoginOpen(true);
-  };
+    setLoginOpen(true)
+  }
 
   const handleLoginSuccess = () => {
-    setAuthSession();
-    setLoginOpen(false);
-    navigate(LOGIN_REDIRECT);
-  };
+    setAuthSession()
+    setLoginOpen(false)
+    navigate(LOGIN_REDIRECT)
+  }
 
   return (
     <>
@@ -75,7 +75,7 @@ export function HomeHero() {
           ) : null}
           <div className="rp-home-hero__actions">
             {hero.actions?.map((action) => {
-              const isLoginAction = action.link === LOGIN_ACTION_LINK;
+              const isLoginAction = action.link === LOGIN_ACTION_LINK
 
               if (isLoginAction) {
                 return (
@@ -87,7 +87,7 @@ export function HomeHero() {
                   >
                     {action.text}
                   </button>
-                );
+                )
               }
 
               return (
@@ -97,7 +97,7 @@ export function HomeHero() {
                   className={`rp-button rp-button--${action.theme || 'brand'} rp-button--big rp-home-hero__action`}
                   {...renderHtmlOrText(action.text)}
                 />
-              );
+              )
             })}
           </div>
         </div>
@@ -111,5 +111,5 @@ export function HomeHero() {
         onSuccess={handleLoginSuccess}
       />
     </>
-  );
+  )
 }
