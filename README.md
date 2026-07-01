@@ -7,7 +7,7 @@
 ## 环境要求
 
 - Node.js >= 24（推荐使用 `.nvmrc` 中的版本）
-- [pnpm](https://pnpm.io/) 9+
+- [pnpm](https://pnpm.io/) 10+（项目通过 `packageManager` 字段锁定版本，推荐启用 [Corepack](https://nodejs.org/api/corepack.html)：`corepack enable`）
 
 ## 快速开始
 

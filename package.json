@@ -2,6 +2,7 @@
   "name": "blog",
   "version": "2.0.0",
   "private": true,
+  "packageManager": "pnpm@11.9.0",
   "homepage": "https://xSeek-Neo.github.io/docs/",
   "type": "module",
   "scripts": {
@@ -33,6 +34,7 @@
     "react-dom": "^19.2.7"
   },
   "engines": {
-    "node": ">=24"
+    "node": ">=24",
+    "pnpm": ">=10"
   }
 }
