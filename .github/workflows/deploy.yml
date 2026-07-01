@@ -44,5 +44,5 @@ jobs:
           github_token: ${{ secrets.TOKEN }}
           branch: main
           force: true
-          repository: xsSeek/docs
+          repository: xSeek-Neo/docs
           directory: ./doc_build

@@ -3,7 +3,7 @@
   "version": "2.0.0",
   "private": true,
   "type": "module",
-  "homepage": "https://xsSeek.github.io/docs/",
+  "homepage": "https://xSeek-Neo.github.io/docs/",
   "engines": {
     "node": ">=24"
   },
