@@ -63,20 +63,20 @@ export function HeroInteractive() {
 
             <div className={styles.cards}>
               <div className={styles.card}>
-                <CodeBlock title="index.mdx" lang="Markdown">
+                <CodeBlock title='index.mdx' lang='Markdown'>
                   <pre className={styles.codeContent}>
                     <code>
-                      <div className="line">
+                      <div className='line'>
                         <span style={{ color: 'var(--shiki-foreground)' }}># {PROJECT_TITLE}</span>
                       </div>
                       <br />
-                      <div className="line">
+                      <div className='line'>
                         <span className={styles.punctuation}>```</span>
                         <span className={styles.function}>ts</span> <span>title</span>
                         <span className={styles.punctuation}>=</span>
                         <span className={styles.string}>&quot;index.ts&quot;</span>
                       </div>
-                      <div className="line">
+                      <div className='line'>
                         <span className={styles.constant}>console</span>
                         <span className={styles.punctuation}>.</span>
                         <span className={styles.function}>log</span>
@@ -84,7 +84,7 @@ export function HeroInteractive() {
                         <span className={styles.string}>&apos;{PROJECT_TITLE}&apos;</span>
                         <span className={styles.punctuation}>);</span>
                       </div>
-                      <div className="line">
+                      <div className='line'>
                         <span className={styles.punctuation}>```</span>
                       </div>
                     </code>

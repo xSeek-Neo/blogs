@@ -95,21 +95,21 @@ export function HomeLayout() {
   const { title, description } = site.siteData
 
   return (
-    <div className="custom-home">
-      <section className="hero">
+    <div className='custom-home'>
+      <section className='hero'>
         <h1>{title}</h1>
         <p>{description}</p>
-        <div className="hero-actions">
-          <a href={lang === 'zh' ? '/zh/guide/start' : '/guide/start'} className="primary-btn">
+        <div className='hero-actions'>
+          <a href={lang === 'zh' ? '/zh/guide/start' : '/guide/start'} className='primary-btn'>
             Get Started
           </a>
-          <a href="https://github.com/..." className="secondary-btn">
+          <a href='https://github.com/...' className='secondary-btn'>
             GitHub
           </a>
         </div>
       </section>
 
-      <section className="showcase">
+      <section className='showcase'>
         {/* Custom content: testimonials, stats, demos, etc. */}
       </section>
     </div>
@@ -136,9 +136,9 @@ import { useFrontmatter } from '@rspress/core/runtime'
 export function DocFooter() {
   const frontmatter = useFrontmatter()
   return (
-    <footer className="custom-doc-footer">
+    <footer className='custom-doc-footer'>
       {frontmatter.author && <span>Author: {frontmatter.author}</span>}
-      <a href="https://github.com/...">Edit this page</a>
+      <a href='https://github.com/...'>Edit this page</a>
     </footer>
   )
 }

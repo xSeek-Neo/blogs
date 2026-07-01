@@ -773,7 +773,7 @@ display:none
 - 2.SVG可作为文件被引入
 
 ```js
-<img src="pic.svg" />
+<img src='pic.svg' />
 ```
 
 - 3.SVG可以转为base64引入页面

@@ -89,7 +89,7 @@ export * from '@rspress/core/theme-original'
 export function Layout() {
   return (
     <OriginalLayout
-      top={<div className="announcement-bar">New version released!</div>}
+      top={<div className='announcement-bar'>New version released!</div>}
       bottom={<footer>© 2025 My Company</footer>}
       afterOutline={<div>Related resources</div>}
     />

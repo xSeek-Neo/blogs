@@ -157,8 +157,8 @@ export * from '@rspress/core/theme-original'
 
 // Named export overrides the wildcard — replaces the GitHub icon site-wide
 export const IconGithub = (props: React.SVGProps<SVGSVGElement>) => (
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" {...props}>
-    <path d="M12 2C6.477 2 2 6.484 2 12.017c0 ..." fill="currentColor" />
+  <svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' {...props}>
+    <path d='M12 2C6.477 2 2 6.484 2 12.017c0 ...' fill='currentColor' />
   </svg>
 )
 ```

@@ -56,11 +56,11 @@ export function LoginModal({ open, onClose, onSuccess }: LoginModalProps) {
   }
 
   return (
-    <div className={styles.overlay} onClick={onClose} role="presentation">
+    <div className={styles.overlay} onClick={onClose} role='presentation'>
       <div
         className={styles.modal}
-        role="dialog"
-        aria-modal="true"
+        role='dialog'
+        aria-modal='true'
         aria-labelledby={titleId}
         onClick={(event) => event.stopPropagation()}
       >
@@ -70,44 +70,44 @@ export function LoginModal({ open, onClose, onSuccess }: LoginModalProps) {
         <p className={styles.hint}>请输入密码后继续浏览笔记内容。</p>
         <form onSubmit={handleSubmit}>
           <div className={styles.field}>
-            <label className={styles.label} htmlFor="login-username">
+            <label className={styles.label} htmlFor='login-username'>
               账户
             </label>
             <input
-              id="login-username"
+              id='login-username'
               className={`${styles.input} ${styles.inputReadonly}`}
-              type="text"
-              name="username"
+              type='text'
+              name='username'
               value={getDefaultUsername()}
               readOnly
-              autoComplete="username"
+              autoComplete='username'
             />
           </div>
           <div className={styles.field}>
-            <label className={styles.label} htmlFor="login-password">
+            <label className={styles.label} htmlFor='login-password'>
               密码
             </label>
             <input
               ref={passwordRef}
-              id="login-password"
+              id='login-password'
               className={styles.input}
-              type="password"
-              name="password"
+              type='password'
+              name='password'
               value={password}
               onChange={(event) => {
                 setPassword(event.target.value)
                 setError('')
               }}
-              autoComplete="current-password"
-              placeholder="请输入密码"
+              autoComplete='current-password'
+              placeholder='请输入密码'
             />
           </div>
           {error ? <p className={styles.error}>{error}</p> : null}
           <div className={styles.actions}>
-            <button className={styles.cancel} type="button" onClick={onClose}>
+            <button className={styles.cancel} type='button' onClick={onClose}>
               取消
             </button>
-            <button className={styles.submit} type="submit">
+            <button className={styles.submit} type='submit'>
               进入
             </button>
           </div>

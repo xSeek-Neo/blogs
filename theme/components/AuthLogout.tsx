@@ -18,7 +18,7 @@ export function AuthLogout() {
   }
 
   return (
-    <button type="button" className={styles.logout} onClick={handleLogout} aria-label="退出登录">
+    <button type='button' className={styles.logout} onClick={handleLogout} aria-label='退出登录'>
       退出
     </button>
   )

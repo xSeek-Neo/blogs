@@ -15,7 +15,7 @@ function FeatureCard({ feature }: { feature: Feature }) {
   const content = (
     <>
       {icon ? (
-        <img className={styles.logo} src={normalizeImagePath(icon)} alt={title} loading="lazy" />
+        <img className={styles.logo} src={normalizeImagePath(icon)} alt={title} loading='lazy' />
       ) : null}
       <div className={styles.title}>{title}</div>
       <p className={styles.description}>{details}</p>
@@ -28,7 +28,7 @@ function FeatureCard({ feature }: { feature: Feature }) {
 
     if (isExternal) {
       return (
-        <a className={styles.card} href={link} target="_blank" rel="noreferrer">
+        <a className={styles.card} href={link} target='_blank' rel='noreferrer'>
           {content}
         </a>
       )

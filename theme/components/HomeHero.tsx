@@ -46,34 +46,34 @@ export function HomeHero() {
 
   return (
     <>
-      <div className="rp-home-hero">
-        <div className="rp-home-hero__container">
+      <div className='rp-home-hero'>
+        <div className='rp-home-hero__container'>
           {hero.badge &&
             (typeof hero.badge === 'string' ? (
-              <div className="rp-home-hero__badge">{hero.badge}</div>
+              <div className='rp-home-hero__badge'>{hero.badge}</div>
             ) : hero.badge.link ? (
-              <Link href={hero.badge.link} className="rp-home-hero__badge">
+              <Link href={hero.badge.link} className='rp-home-hero__badge'>
                 {hero.badge.text}
               </Link>
             ) : (
-              <div className="rp-home-hero__badge">{hero.badge.text}</div>
+              <div className='rp-home-hero__badge'>{hero.badge.text}</div>
             ))}
-          <div className="rp-home-hero__content">
-            <div className="rp-home-hero__title">
-              <span className="rp-home-hero__title-brand" {...renderHtmlOrText(hero.name)} />
+          <div className='rp-home-hero__content'>
+            <div className='rp-home-hero__title'>
+              <span className='rp-home-hero__title-brand' {...renderHtmlOrText(hero.name)} />
             </div>
             {multiHeroText.map((heroText) => (
               <div
                 key={heroText}
-                className="rp-home-hero__subtitle"
+                className='rp-home-hero__subtitle'
                 {...renderHtmlOrText(heroText)}
               />
             ))}
           </div>
           {hero.tagline ? (
-            <p className="rp-home-hero__tagline" {...renderHtmlOrText(hero.tagline)} />
+            <p className='rp-home-hero__tagline' {...renderHtmlOrText(hero.tagline)} />
           ) : null}
-          <div className="rp-home-hero__actions">
+          <div className='rp-home-hero__actions'>
             {hero.actions?.map((action) => {
               const isLoginAction = action.link === LOGIN_ACTION_LINK
 
@@ -81,7 +81,7 @@ export function HomeHero() {
                 return (
                   <button
                     key={action.link}
-                    type="button"
+                    type='button'
                     className={`rp-button rp-button--${action.theme || 'brand'} rp-button--big rp-home-hero__action`}
                     onClick={openLoginOrNavigate}
                   >
@@ -101,7 +101,7 @@ export function HomeHero() {
             })}
           </div>
         </div>
-        <div className="rp-home-hero__image">
+        <div className='rp-home-hero__image'>
           <HeroInteractive />
         </div>
       </div>
