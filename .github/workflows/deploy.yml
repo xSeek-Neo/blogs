@@ -28,6 +28,13 @@ jobs:
       - name: Build
         run: pnpm build
 
+      - name: Check deploy token
+        run: |
+          if [ -z "${{ secrets.TOKEN }}" ]; then
+            echo "::error::请在仓库 Settings → Secrets and variables → Actions 中添加 TOKEN（PAT，需具备 xSeek-Neo/docs 的 repo 写权限）"
+            exit 1
+          fi
+
       - name: Init new repo in dist folder and commit generated files
         run: |-
           cd doc_build
