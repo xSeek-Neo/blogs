@@ -1,0 +1,48 @@
+name: rspress-deploy
+run-name: Github Actions Deploy
+on:
+  push:
+    branches: ['main']
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build
+        run: pnpm build
+
+      - name: Init new repo in dist folder and commit generated files
+        run: |-
+          cd doc_build
+          git init
+          git add .
+          git config --local user.email "352671309@qq.com"
+          git config --local user.name "Ellis"
+          git config --local init.defaultBranch main
+          git commit -am 'deploy'
+
+      - name: Force push to destination branch
+        uses: ad-m/github-push-action@v0.8.0
+        with:
+          github_token: ${{ secrets.TOKEN }}
+          branch: main
+          force: true
+          repository: xsSeek/docs
+          directory: ./doc_build

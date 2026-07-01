@@ -1,8 +1,9 @@
 {
-  "name": "rspress-doc-template",
-  "version": "1.0.0",
+  "name": "blog",
+  "version": "2.0.0",
   "private": true,
   "type": "module",
+  "homepage": "https://xsSeek.github.io/docs/",
   "scripts": {
     "build": "rspress build",
     "dev": "rspress dev",
