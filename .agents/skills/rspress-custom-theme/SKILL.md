@@ -108,9 +108,7 @@ import { Layout as OriginalLayout } from '@rspress/core/theme-original';
 export * from '@rspress/core/theme-original';
 
 export function Layout() {
-  return (
-    <OriginalLayout beforeNavTitle={<MyLogo />} bottom={<CustomFooter />} />
-  );
+  return <OriginalLayout beforeNavTitle={<MyLogo />} bottom={<CustomFooter />} />;
 }
 ```
 
@@ -198,10 +196,7 @@ For components that should render on every page without theme overrides:
 export default defineConfig({
   globalUIComponents: [
     path.join(__dirname, 'components', 'BackToTop.tsx'),
-    [
-      path.join(__dirname, 'components', 'Analytics.tsx'),
-      { trackingId: '...' },
-    ],
+    [path.join(__dirname, 'components', 'Analytics.tsx'), { trackingId: '...' }],
   ],
 });
 ```

@@ -125,9 +125,7 @@ import { Layout as OriginalLayout } from '@rspress/core/theme-original';
 export * from '@rspress/core/theme-original';
 
 function CustomH1({ children }: { children: React.ReactNode }) {
-  return (
-    <h1 style={{ borderBottom: '2px solid var(--rp-c-brand)' }}>{children}</h1>
-  );
+  return <h1 style={{ borderBottom: '2px solid var(--rp-c-brand)' }}>{children}</h1>;
 }
 
 export function Layout() {

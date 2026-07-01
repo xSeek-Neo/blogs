@@ -15,12 +15,7 @@ function FeatureCard({ feature }: { feature: Feature }) {
   const content = (
     <>
       {icon ? (
-        <img
-          className={styles.logo}
-          src={normalizeImagePath(icon)}
-          alt={title}
-          loading="lazy"
-        />
+        <img className={styles.logo} src={normalizeImagePath(icon)} alt={title} loading="lazy" />
       ) : null}
       <div className={styles.title}>{title}</div>
       <p className={styles.description}>{details}</p>
@@ -56,17 +51,11 @@ function FeatureCard({ feature }: { feature: Feature }) {
   return <div className={styles.card}>{content}</div>;
 }
 
-export function HomeFeatureCards({
-  features: featuresProp,
-}: {
-  features?: Feature[];
-}) {
+export function HomeFeatureCards({ features: featuresProp }: { features?: Feature[] }) {
   const { frontmatter } = useFrontmatter();
   const features = featuresProp ?? frontmatter?.features;
   const intro =
-    typeof frontmatter?.featuresIntro === 'string'
-      ? frontmatter.featuresIntro
-      : undefined;
+    typeof frontmatter?.featuresIntro === 'string' ? frontmatter.featuresIntro : undefined;
 
   if (!features?.length) {
     return null;

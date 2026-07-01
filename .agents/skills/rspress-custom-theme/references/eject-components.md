@@ -100,10 +100,7 @@ export function HomeLayout() {
         <h1>{title}</h1>
         <p>{description}</p>
         <div className="hero-actions">
-          <a
-            href={lang === 'zh' ? '/zh/guide/start' : '/guide/start'}
-            className="primary-btn"
-          >
+          <a href={lang === 'zh' ? '/zh/guide/start' : '/guide/start'} className="primary-btn">
             Get Started
           </a>
           <a href="https://github.com/..." className="secondary-btn">

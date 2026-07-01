@@ -113,10 +113,7 @@ if (fs.existsSync('.git/COMMIT_EDITMSG')) {
     const results = execSync(`git diff --cached --name-only`, {
       encoding: 'utf-8',
     });
-    if (
-      results.indexOf('application-dev.yml') > -1 &&
-      msg.indexOf('.yml') > -1
-    ) {
+    if (results.indexOf('application-dev.yml') > -1 && msg.indexOf('.yml') > -1) {
       console.log('application-dev.yml 在用户的确认下提交到版本仓库。');
       process.exit(0);
     } else {

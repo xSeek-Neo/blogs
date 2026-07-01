@@ -60,10 +60,7 @@ export function HomeHero() {
             ))}
           <div className="rp-home-hero__content">
             <div className="rp-home-hero__title">
-              <span
-                className="rp-home-hero__title-brand"
-                {...renderHtmlOrText(hero.name)}
-              />
+              <span className="rp-home-hero__title-brand" {...renderHtmlOrText(hero.name)} />
             </div>
             {multiHeroText.map((heroText) => (
               <div
@@ -74,10 +71,7 @@ export function HomeHero() {
             ))}
           </div>
           {hero.tagline ? (
-            <p
-              className="rp-home-hero__tagline"
-              {...renderHtmlOrText(hero.tagline)}
-            />
+            <p className="rp-home-hero__tagline" {...renderHtmlOrText(hero.tagline)} />
           ) : null}
           <div className="rp-home-hero__actions">
             {hero.actions?.map((action) => {

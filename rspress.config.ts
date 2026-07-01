@@ -22,9 +22,7 @@ export default defineConfig({
     ['meta', { name: 'googlebot', content: 'noindex, nofollow' }],
   ],
   themeConfig: {
-    socialLinks: [
-      { icon: 'github', mode: 'link', content: 'https://github.com/xSeek-Neo' },
-    ],
+    socialLinks: [{ icon: 'github', mode: 'link', content: 'https://github.com/xSeek-Neo' }],
   },
   builderConfig: {
     dev: {

@@ -1,9 +1,11 @@
 ## Tools
 
-### ESLint
+### Oxlint
 
-- Run `npm run lint` to lint your code
+- Run `pnpm lint` to lint your code
+- Run `pnpm lint:fix` to auto-fix lint issues
 
-### Prettier
+### Oxfmt
 
-- Run `npm run format` to format your code
+- Run `pnpm format` to format your code
+- Run `pnpm format:check` to verify formatting in CI

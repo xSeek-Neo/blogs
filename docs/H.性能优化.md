@@ -1047,12 +1047,7 @@ HTML 解析中 → 同步脚本（阻塞）→ 继续解析
 **延迟加载非关键 CSS**
 
 ```html
-<link
-  rel="stylesheet"
-  href="non-critical.css"
-  media="print"
-  onload="this.media='all'"
-/>
+<link rel="stylesheet" href="non-critical.css" media="print" onload="this.media='all'" />
 ```
 
 ### 2. JavaScript 加载优化
@@ -1442,6 +1437,7 @@ const MyComponent = React.lazy(() => import('./MyComponent'));
    ```
 
 2. **路由懒加载**
+
    ```javascript
 
    ```

@@ -17,9 +17,7 @@ export function getDefaultUsername(): string {
 }
 
 export function verifyCredentials(username: string, password: string): boolean {
-  return (
-    username.trim() === authConfig.username && password === authConfig.password
-  );
+  return username.trim() === authConfig.username && password === authConfig.password;
 }
 
 export function setAuthSession(): void {

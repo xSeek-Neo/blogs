@@ -21,8 +21,7 @@
 
 - 核心步骤：
 
-:::tip
-1.使用 data-src（或 data-srcset）属性存储真实图片地址。
+:::tip 1.使用 data-src（或 data-srcset）属性存储真实图片地址。
 
 2.检测图片是否进入视口，触发加载。
 
@@ -31,8 +30,7 @@
 
 ### 二、实现方案
 
-:::tip
-1.原生 JavaScript + Intersection Observer API（推荐）
+:::tip 1.原生 JavaScript + Intersection Observer API（推荐）
 
 优势：高性能、低耦合，现代浏览器原生支持。
 :::
@@ -67,8 +65,7 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 ```
 
-:::tip
-2.传统滚动事件监听 + 节流
+:::tip 2.传统滚动事件监听 + 节流
 
 适用场景：兼容旧浏览器（如IE）
 :::
@@ -92,8 +89,7 @@ window.addEventListener('resize', throttleLazyLoad);
 lazyLoad(); // 首次加载可见图片
 ```
 
-:::tip
-3.第三方库
+:::tip 3.第三方库
 
 - lozad.js：轻量级（<1KB），基于Intersection Observer。
 
@@ -137,12 +133,7 @@ strong/italic
 头部用head 主体用main 底部用foot...
 怎么判断页面是否语义化了？
 把CSS去掉，如果能够清晰的看出来页面结构，显示内容较为正常
-为什么要选择语义化？
-1.让HTML结构更加清晰明了
-2.方便团队协作，利于开发
-3.有利于爬虫和SEO
-4.能够让浏览器更好的去解析代码
-5.给用户带来良好的体验
+为什么要选择语义化？1.让HTML结构更加清晰明了2.方便团队协作，利于开发3.有利于爬虫和SEO 4.能够让浏览器更好的去解析代码5.给用户带来良好的体验
 2.H5C3有哪些新特性
 
 ## H5新特性：十个新特性
@@ -460,8 +451,7 @@ data:[mediatype][;base63], data
 - **Performance API**：
 
   ```javascript
-  const whiteScreenTime =
-    performance.timing.responseStart - performance.timing.navigationStart;
+  const whiteScreenTime = performance.timing.responseStart - performance.timing.navigationStart;
   console.log(`白屏时间：${whiteScreenTime}ms`);
   ```
 
@@ -492,8 +482,7 @@ data:[mediatype][;base63], data
 
   ```javascript
   const firstScreenTime =
-    performance.timing.domContentLoadedEventEnd -
-    performance.timing.navigationStart;
+    performance.timing.domContentLoadedEventEnd - performance.timing.navigationStart;
   console.log(`首屏时间：${firstScreenTime}ms`);
   ```
 
@@ -742,53 +731,33 @@ button.addEventListener('click', async () => {
 
 ## H5的新特性：
 
-1.语义化的标签
-2.新增音频视频
-3.画布canvas
-4.数据存储localstorage sessionstorage
-5.增加了表单控件 email url search...
-6.拖拽释放API
-CSS3的新特性：
-1.新增选择器：属性选择器、伪类选择器、伪元素选择器
-2.增加了媒体查询
-3.文字阴影
-4.边框
-5.盒子模型box-sizing
-6.渐变
-7.过度
-8.自定义动画
-9.背景的属性
+1.语义化的标签2.新增音频视频3.画布canvas 4.数据存储localstorage sessionstorage 5.增加了表单控件 email url search... 6.拖拽释放API
+CSS3的新特性：1.新增选择器：属性选择器、伪类选择器、伪元素选择器2.增加了媒体查询3.文字阴影4.边框5.盒子模型box-sizing 6.渐变7.过度8.自定义动画9.背景的属性
 10.2D和3D
 
 ## rem是如何做适配的
 
 rem是相对长度，相对于根元素（html）的font-size属性来计算大小，通常来做移动端的适配
 rem是根据根元素font-size计算值的倍数
-比如html上的font-size:16px，给div设置宽为1.5rem,1.2rem = 16px*1.2 = 19.2px
+比如html上的font-size:16px，给div设置宽为1.5rem,1.2rem = 16px\*1.2 = 19.2px
 
 ## 解决了哪些移动端的兼容问题？
 
 1.当设置样式overflow:scroll/auto时，IOS上的滚动会卡顿
--webkit-overflow-scrolling:touch;
-2.在安卓环境下placeholder文字设置行高时会偏上
-input有placeholder属性的时候不要设置行高
-3.移动端字体小于12px时异常显示
+-webkit-overflow-scrolling:touch; 2.在安卓环境下placeholder文字设置行高时会偏上
+input有placeholder属性的时候不要设置行高3.移动端字体小于12px时异常显示
 应该先把在整体放大一倍，然后再用transform进行缩小
 4.ios下input按钮设置了disabled属性为true显示异常
 input[typy=button]{
 opcity:1
-}
-5.安卓手机下取消语音输入按钮
+} 5.安卓手机下取消语音输入按钮
 input::-webkit-input-speech-button{
 display:none
 }
 6.IOS下取消input输入框在输入引文首字母默认大写
-<input autocapitalize='off' autocorrect='off'/>
-7.禁用IOS和安卓用户选中文字
-添加全局CSS样式：-webkit-user-select:none
-8.禁止IOS弹出各种窗口
--webkit-touch-callout:none
-9.禁止IOS识别长串数字为电话
+<input autocapitalize='off' autocorrect='off'/> 7.禁用IOS和安卓用户选中文字
+添加全局CSS样式：-webkit-user-select:none 8.禁止IOS弹出各种窗口
+-webkit-touch-callout:none 9.禁止IOS识别长串数字为电话
 添加meta属性 <meta conten='telephone=no' name='format-detection'>
 
 ## svg格式了解多少
