@@ -56,10 +56,10 @@ pnpm deploy
 
 ## 项目结构
 
-```
+```text
 ├── docs/              # 文档内容
+│   └── public/        # 静态资源
 ├── theme/             # 自定义主题（首页、登录等）
-├── public/            # 静态资源
 ├── scripts/deploy.sh  # 本地部署脚本
 └── rspress.config.ts  # Rspress 配置
 ```
