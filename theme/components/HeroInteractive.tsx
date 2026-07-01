@@ -86,7 +86,9 @@ export function HeroInteractive() {
                         <span className={styles.function}>ts</span>{' '}
                         <span>title</span>
                         <span className={styles.punctuation}>=</span>
-                        <span className={styles.string}>&quot;index.ts&quot;</span>
+                        <span className={styles.string}>
+                          &quot;index.ts&quot;
+                        </span>
                       </div>
                       <div className="line">
                         <span className={styles.constant}>console</span>

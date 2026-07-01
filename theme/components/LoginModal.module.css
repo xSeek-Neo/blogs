@@ -14,7 +14,10 @@
   box-sizing: border-box;
   position: relative;
   border: 1px solid var(--login-modal-border, #8fa1b94d);
-  background: var(--login-modal-bg, linear-gradient(160deg, #ffffff 0%, #f8f9fb 100%));
+  background: var(
+    --login-modal-bg,
+    linear-gradient(160deg, #ffffff 0%, #f8f9fb 100%)
+  );
   border-radius: 16px;
   width: 100%;
   max-width: 420px;
@@ -74,7 +77,9 @@
   color: var(--rp-c-text-1);
   font-size: 14px;
   line-height: 1.4;
-  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
 }
 
 .input::placeholder {

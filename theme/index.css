@@ -22,15 +22,35 @@
 
 /* 亮色模式 */
 html:not(.rp-dark) {
-  --rp-page-grid-color: color-mix(in srgb, var(--rp-c-divider-light) 35%, transparent);
+  --rp-page-grid-color: color-mix(
+    in srgb,
+    var(--rp-c-divider-light) 35%,
+    transparent
+  );
   --rp-home-background-bg:
-    radial-gradient(42.12% 56.13% at 100% 0%, rgba(255, 94, 0, 0.1) 0%, transparent 100%),
-    radial-gradient(42.01% 79.63% at 52.86% 0%, rgba(255, 117, 36, 0.2) 0%, transparent 100%),
-    radial-gradient(79.67% 58.09% at 0% 0%, rgba(255, 112, 77, 0.2) 0%, transparent 100%);
+    radial-gradient(
+      42.12% 56.13% at 100% 0%,
+      rgba(255, 94, 0, 0.1) 0%,
+      transparent 100%
+    ),
+    radial-gradient(
+      42.01% 79.63% at 52.86% 0%,
+      rgba(255, 117, 36, 0.2) 0%,
+      transparent 100%
+    ),
+    radial-gradient(
+      79.67% 58.09% at 0% 0%,
+      rgba(255, 112, 77, 0.2) 0%,
+      transparent 100%
+    );
   --rp-home-feature-bg: linear-gradient(145deg, #ffffff 0%, #f7f8fa 100%);
 
   --home-feature-card-stroke: #d8dee8;
-  --home-feature-card-gradient: linear-gradient(145deg, #ffffff 0%, #f7f8fa 100%);
+  --home-feature-card-gradient: linear-gradient(
+    145deg,
+    #ffffff 0%,
+    #f7f8fa 100%
+  );
   --home-feature-card-shadow: 0 8px 24px rgba(15, 23, 42, 0.06);
   --home-feature-title-color: #111827;
   --home-feature-desc-color: #6b7280;
@@ -57,15 +77,35 @@ html:not(.rp-dark) {
 
 /* 暗色模式 */
 html.rp-dark {
-  --rp-page-grid-color: color-mix(in srgb, var(--rp-c-divider-light) 22%, transparent);
+  --rp-page-grid-color: color-mix(
+    in srgb,
+    var(--rp-c-divider-light) 22%,
+    transparent
+  );
   --rp-home-background-bg:
-    radial-gradient(42.12% 56.13% at 100% 0%, rgba(255, 94, 0, 0.14) 0%, transparent 100%),
-    radial-gradient(42.01% 79.63% at 52.86% 0%, rgba(255, 117, 36, 0.08) 0%, transparent 100%),
-    radial-gradient(79.67% 58.09% at 0% 0%, rgba(255, 112, 77, 0.1) 0%, transparent 100%);
+    radial-gradient(
+      42.12% 56.13% at 100% 0%,
+      rgba(255, 94, 0, 0.14) 0%,
+      transparent 100%
+    ),
+    radial-gradient(
+      42.01% 79.63% at 52.86% 0%,
+      rgba(255, 117, 36, 0.08) 0%,
+      transparent 100%
+    ),
+    radial-gradient(
+      79.67% 58.09% at 0% 0%,
+      rgba(255, 112, 77, 0.1) 0%,
+      transparent 100%
+    );
   --rp-home-feature-bg: linear-gradient(145deg, #1c1f26 0%, #16181d 100%);
 
   --home-feature-card-stroke: rgba(143, 161, 185, 0.22);
-  --home-feature-card-gradient: linear-gradient(145deg, #1f232b 0%, #181b22 100%);
+  --home-feature-card-gradient: linear-gradient(
+    145deg,
+    #1f232b 0%,
+    #181b22 100%
+  );
   --home-feature-card-shadow: 0 12px 36px rgba(0, 0, 0, 0.42);
   --home-feature-title-color: #f3f4f6;
   --home-feature-desc-color: #9aa3b2;

@@ -2,11 +2,7 @@ import { useFrontmatter } from '@rspress/core/runtime';
 import { Link, renderHtmlOrText, useLinkNavigate } from '@rspress/core/theme';
 import { useState } from 'react';
 
-import {
-  hasAuthSession,
-  LOGIN_REDIRECT,
-  setAuthSession,
-} from '../utils/auth';
+import { hasAuthSession, LOGIN_REDIRECT, setAuthSession } from '../utils/auth';
 import { HeroInteractive } from './HeroInteractive';
 import { LoginModal } from './LoginModal';
 

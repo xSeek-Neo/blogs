@@ -17,7 +17,7 @@
 ```tsx
 useEffect(() => {
   const timer = setInterval(() => {
-    setCount(prev => prev + 1); // 始终基于最新状态
+    setCount((prev) => prev + 1); // 始终基于最新状态
   }, 1000);
   return () => clearInterval(timer);
 }, []);
@@ -49,7 +49,7 @@ function Search() {
     return () => window.removeEventListener('scroll', handler);
   }, []); // 只需订阅一次
 
-  return <input value={keyword} onChange={e => setKeyword(e.target.value)} />;
+  return <input value={keyword} onChange={(e) => setKeyword(e.target.value)} />;
 }
 ```
 
@@ -80,20 +80,20 @@ const handleClick = useCallback(() => {
 - useInsertionEffect 比 useLayoutEffect 更早。useInsertionEffect执行时， DOM海没有更新。
 - 本质上 useInsertionEffect 主要是解决CSS-in-js 在渲染中注入样式的性能问题。
 
-
 ## react saga 使用
-[react saga 使用](https://www.jianshu.com/p/b17d8bec13f3)
 
+[react saga 使用](https://www.jianshu.com/p/b17d8bec13f3)
 
 ## 21个React性能优化技巧
 
 [21个React性能优化技巧](https://www.infoq.cn/article/KVE8xtRs-uPphptq5LUz)
 
-
 ## React错误边界处理
+
 [React错误边界处理](https://github.com/bvaughn/react-error-boundary)
 
 ## HOOK模拟生命周期
+
 ![原型链](/imgs/react-lifeCycle.png)
 
 1. 挂载阶段 constructor --> getDerivedStateFormProps --> render --> componentDidMount
@@ -149,13 +149,11 @@ useLayoutEffect(() => {
 
 https://blog.csdn.net/qq_16546829/article/details/137056845
 
-
 ## tsx/jsx 转换成普通js语法过程
 
 1.@babel/parse 把jsx 转成 AST语法
 2.@babel/traverse 去做转换
-3.@babel/generator 把AST 生成新的代码（低版本浏览器兼容代码  或 React.createElement语法）
-4. React.createElement 返回的就是vDom (虚拟DOM)
+3.@babel/generator 把AST 生成新的代码（低版本浏览器兼容代码 或 React.createElement语法）4. React.createElement 返回的就是vDom (虚拟DOM)
 
 ## useMemo 和 useCallback 区别
 
@@ -233,10 +231,10 @@ useMemo 适合缓存复杂计算后的值
 父组件每次渲染都给子组件传一个新函数，`memo` 会认为 props 变了，从而子组件仍然重渲染：
 
 ```tsx
-import React, { memo, useState } from "react";
+import React, { memo, useState } from 'react';
 
 const Child = memo(function Child({ onClick }: { onClick: () => void }) {
-  console.log("Child render");
+  console.log('Child render');
   return <button onClick={onClick}>child</button>;
 });
 
@@ -248,7 +246,7 @@ export default function Parent() {
       <button onClick={() => setCount((c) => c + 1)}>parent +</button>
 
       {/* ❌ 每次 Parent render 都会创建新函数 -> Child 也会 render */}
-      <Child onClick={() => console.log("child click")} />
+      <Child onClick={() => console.log('child click')} />
     </div>
   );
 }
@@ -257,10 +255,10 @@ export default function Parent() {
 用 `useCallback` 让引用稳定后，Parent 因为 `count` 变化而重渲染时，Child 就能更容易跳过渲染：
 
 ```tsx
-import React, { memo, useCallback, useState } from "react";
+import React, { memo, useCallback, useState } from 'react';
 
 const Child = memo(function Child({ onClick }: { onClick: () => void }) {
-  console.log("Child render");
+  console.log('Child render');
   return <button onClick={onClick}>child</button>;
 });
 
@@ -268,7 +266,7 @@ export default function Parent() {
   const [count, setCount] = useState(0);
 
   const handleChildClick = useCallback(() => {
-    console.log("child click");
+    console.log('child click');
   }, []);
 
   return (
@@ -287,16 +285,16 @@ export default function Parent() {
 如果 effect 依赖里有一个“每次 render 都变”的函数，就会导致 effect 反复执行（解绑再绑定）：
 
 ```tsx
-import React from "react";
+import React from 'react';
 
 export default function Comp() {
   const onResize = () => {
-    console.log("resize");
+    console.log('resize');
   };
 
   React.useEffect(() => {
-    window.addEventListener("resize", onResize);
-    return () => window.removeEventListener("resize", onResize);
+    window.addEventListener('resize', onResize);
+    return () => window.removeEventListener('resize', onResize);
   }, [onResize]); // ❌ onResize 每次 render 都是新引用 -> effect 每次都重跑
 
   return <div>open console</div>;
@@ -306,16 +304,16 @@ export default function Comp() {
 用 `useCallback` 稳定引用后，只有依赖真的变化时才会重新订阅：
 
 ```tsx
-import React from "react";
+import React from 'react';
 
 export default function Comp() {
   const onResize = React.useCallback(() => {
-    console.log("resize");
+    console.log('resize');
   }, []);
 
   React.useEffect(() => {
-    window.addEventListener("resize", onResize);
-    return () => window.removeEventListener("resize", onResize);
+    window.addEventListener('resize', onResize);
+    return () => window.removeEventListener('resize', onResize);
   }, [onResize]); // ✅ 引用稳定 -> 不会无意义重跑
 
   return <div>open console</div>;
@@ -326,4 +324,3 @@ export default function Comp() {
 
 - **需要在意**：handler 作为 props 传给 `React.memo` 子组件；或 handler 出现在 `useEffect/useMemo` 等依赖数组里，并且组件渲染很频繁。
 - **一般不用纠结**：handler 只在当前组件内部用、没传给子组件、也不参与依赖优化时，内联写法通常没问题。
-

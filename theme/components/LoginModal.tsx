@@ -56,11 +56,7 @@ export function LoginModal({ open, onClose, onSuccess }: LoginModalProps) {
   };
 
   return (
-    <div
-      className={styles.overlay}
-      onClick={onClose}
-      role="presentation"
-    >
+    <div className={styles.overlay} onClick={onClose} role="presentation">
       <div
         className={styles.modal}
         role="dialog"

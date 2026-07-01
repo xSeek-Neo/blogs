@@ -4,13 +4,19 @@
     "items": [
       { "text": "ES6 入门教程-阮一峰", "link": "https://es6.ruanyifeng.com" },
       { "text": "StackOverFlow", "link": "https://stackoverflow.com" },
-      { "text": "未来博客面试题", "link": "https://interview.poetries.top/docs/base.html" }
+      {
+        "text": "未来博客面试题",
+        "link": "https://interview.poetries.top/docs/base.html"
+      }
     ]
   },
   {
     "text": "面试题",
     "items": [
-      { "text": "面试题", "link": "https://www.bookstack.cn/read/CS-Interview-Knowledge-Map/README.md" }
+      {
+        "text": "面试题",
+        "link": "https://www.bookstack.cn/read/CS-Interview-Knowledge-Map/README.md"
+      }
     ]
   },
   {

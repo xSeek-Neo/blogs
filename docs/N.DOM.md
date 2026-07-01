@@ -17,22 +17,22 @@ el.appendChild(clone)
 1. 選取元素 (Selecting)
    在使用 JavaScript 操作 DOM 之前，必須先獲取目標元素
 
-| 方法 | 返回 | 特点 |
-|------|------|------|
-| getElementById | 单个元素 | 最快 |
-| getElementsByClassName | HTMLCollection | 动态集合 |
-| getElementsByTagName | HTMLCollection | 动态 |
-| querySelector | 单个 | CSS 选择器 |
-| querySelectorAll | NodeList | 静态 |
- 
- 还有 parentElement / children / childNodes firstChild / lastChild /nextElementSibling / previousElementSibling / el.closest('.wrapper')
+| 方法                   | 返回           | 特点       |
+| ---------------------- | -------------- | ---------- |
+| getElementById         | 单个元素       | 最快       |
+| getElementsByClassName | HTMLCollection | 动态集合   |
+| getElementsByTagName   | HTMLCollection | 动态       |
+| querySelector          | 单个           | CSS 选择器 |
+| querySelectorAll       | NodeList       | 静态       |
+
+还有 parentElement / children / childNodes firstChild / lastChild /nextElementSibling / previousElementSibling / el.closest('.wrapper')
 
 2. 修改內容與屬性 (Modifying)
-   * 內容修改：
+   - 內容修改：
      - textContent：修改或獲取純文字內容（較安全）
      - innerHTML：解析並插入 HTML 結構
      - innerText 满
-   * 屬性操作：
+   - 屬性操作：
      - setAttribute(name, value) 與 getAttribute(name)：管理自定義或標準屬性
      - removeAttribute
      - element.style：直接修改行內樣式
@@ -40,14 +40,14 @@ el.appendChild(clone)
 
 3. 新增與刪除節點 (Creating & Deleting)
 
-* 新增：先用 document.createElement(tag) 創建，再用以下方法插入：
+- 新增：先用 document.createElement(tag) 創建，再用以下方法插入：
   - appendChild(node)：作為最後一個子節點加入
   - prepend(node)：作為第一個子節點加入
   - after(node) 或 before(node)：在元素前後插入兄弟節點
   - insertBefore
   - insertAdjacentHTML
   - insertAdjacentText
-* 刪除：直接呼叫 element.remove() 或是透過父節點執行 removeChild(child)
+- 刪除：直接呼叫 element.remove() 或是透過父節點執行 removeChild(child)
 
 ---
 
@@ -91,7 +91,7 @@ const evt = new CustomEvent('user:action', {
   detail: { id: 123 },
   bubbles: true,
   cancelable: true,
-})
+});
 ```
 
 - **type**：事件名字符串
@@ -103,31 +103,31 @@ const evt = new CustomEvent('user:action', {
 
 ```js
 document.addEventListener('user:action', (e) => {
-  console.log('收到数据:', e.detail)
-})
+  console.log('收到数据:', e.detail);
+});
 ```
 
 ### 3）派发事件
 
 ```js
-el.dispatchEvent(evt)
+el.dispatchEvent(evt);
 ```
 
 如果 `cancelable: true`，`dispatchEvent()` 的返回值会反映是否被否决：
 
 ```js
-const ok = el.dispatchEvent(evt) // true 表示未被 preventDefault 否决
+const ok = el.dispatchEvent(evt); // true 表示未被 preventDefault 否决
 ```
 
 ---
 
 ## 联动速记（参数 ↔ 阶段 ↔ 影响）
 
-| 点 | 关联 | 影响 |
-| :--- | :--- | :--- |
-| `bubbles` | 冒泡阶段 | 为 `false` 时，挂在父级（冒泡阶段）的监听器不会触发 |
+| 点           | 关联               | 影响                                                            |
+| :----------- | :----------------- | :-------------------------------------------------------------- |
+| `bubbles`    | 冒泡阶段           | 为 `false` 时，挂在父级（冒泡阶段）的监听器不会触发             |
 | `cancelable` | `preventDefault()` | 为 `true` 时，监听器可以否决，进而影响 `dispatchEvent()` 返回值 |
-| `capture` | 捕获阶段 | 即使 `bubbles: false`，捕获监听器也能在“下行路径”截获 |
+| `capture`    | 捕获阶段           | 即使 `bubbles: false`，捕获监听器也能在“下行路径”截获           |
 
 ---
 

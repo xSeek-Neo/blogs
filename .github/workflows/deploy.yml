@@ -37,7 +37,7 @@ jobs:
 
       - name: Init new repo in dist folder and commit generated files
         run: |-
-          cd doc_build
+          cd dist
           git init
           git add .
           git config --local user.email "352671309@qq.com"
@@ -52,4 +52,4 @@ jobs:
           branch: main
           force: true
           repository: xSeek-Neo/docs
-          directory: ./doc_build
+          directory: ./dist

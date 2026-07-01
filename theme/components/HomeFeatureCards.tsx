@@ -24,9 +24,7 @@ function FeatureCard({ feature }: { feature: Feature }) {
       ) : null}
       <div className={styles.title}>{title}</div>
       <p className={styles.description}>{details}</p>
-      {link && linkText ? (
-        <div className={styles.url}>{linkText}</div>
-      ) : null}
+      {link && linkText ? <div className={styles.url}>{linkText}</div> : null}
     </>
   );
 
@@ -35,12 +33,7 @@ function FeatureCard({ feature }: { feature: Feature }) {
 
     if (isExternal) {
       return (
-        <a
-          className={styles.card}
-          href={link}
-          target="_blank"
-          rel="noreferrer"
-        >
+        <a className={styles.card} href={link} target="_blank" rel="noreferrer">
           {content}
         </a>
       );
