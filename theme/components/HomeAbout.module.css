@@ -10,10 +10,12 @@
   border: 1px solid var(--home-feature-card-stroke);
   border-radius: 10px;
   background: var(--home-feature-card-gradient);
+  box-shadow: var(--home-feature-card-shadow);
 }
 
 .title {
   margin: 0 0 1rem;
+  color: var(--home-feature-title-color);
   font-size: 1.5rem;
   font-weight: 700;
   line-height: 1.4;
@@ -25,6 +27,19 @@
 
 .about :global(.rp-callout) {
   margin: 0 0 1.5rem;
+}
+
+.about :global(.rp-callout--warning) {
+  border-color: var(--home-callout-warning-border);
+  background-color: var(--home-callout-warning-bg);
+}
+
+.about :global(.rp-callout--warning .rp-callout__title) {
+  color: var(--home-callout-warning-title);
+}
+
+.about :global(.rp-callout--warning .rp-callout__content) {
+  color: var(--home-callout-warning-text);
 }
 
 .copyright,

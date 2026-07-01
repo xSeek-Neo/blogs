@@ -1,16 +1,17 @@
 import {
-  HomeHero as BasicHomeHero,
   HomeLayout as BasicHomeLayout,
-  type HomeHeroProps,
+  Layout as BasicLayout,
 } from '@rspress/core/theme-original';
 
-import { HeroInteractive } from './components/HeroInteractive';
+import { AuthLogout } from './components/AuthLogout';
 import { HomeAbout } from './components/HomeAbout';
 import { HomeFeatureCards } from './components/HomeFeatureCards';
+import { HomeHero } from './components/HomeHero';
 import './index.css';
+import '@rspress/core/theme-original/components/HomeHero/index.css';
 
-function HomeHero({ image: _, ...otherProps }: HomeHeroProps) {
-  return <BasicHomeHero image={<HeroInteractive />} {...otherProps} />;
+function Layout() {
+  return <BasicLayout afterNavMenu={<AuthLogout />} />;
 }
 
 function HomeLayout() {
@@ -22,4 +23,4 @@ function HomeFeature() {
 }
 
 export * from '@rspress/core/theme-original';
-export { HomeHero, HomeLayout, HomeFeature };
+export { HomeHero, HomeLayout, HomeFeature, Layout };

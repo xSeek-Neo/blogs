@@ -16,6 +16,9 @@ export default defineConfig({
     ],
   },
   builderConfig: {
+    dev: {
+      lazyCompilation: false,
+    },
     server: {
       port: 5200,
       host: true,

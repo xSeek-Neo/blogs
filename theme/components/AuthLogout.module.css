@@ -1,0 +1,20 @@
+.logout {
+  border: 1px solid var(--rp-c-divider-light);
+  background: transparent;
+  border-radius: 999px;
+  padding: 6px 12px;
+  color: var(--rp-c-text-2);
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 1;
+  white-space: nowrap;
+  cursor: pointer;
+  transition:
+    border-color 0.2s ease,
+    color 0.2s ease;
+}
+
+.logout:hover {
+  border-color: var(--rp-c-brand);
+  color: var(--rp-c-brand);
+}

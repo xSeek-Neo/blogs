@@ -25,6 +25,7 @@
   box-sizing: border-box;
   border: 1px solid var(--home-feature-card-stroke);
   background: var(--home-feature-card-gradient);
+  box-shadow: var(--home-feature-card-shadow);
   border-radius: 10px;
   flex-direction: column;
   flex: 1 1 100%;

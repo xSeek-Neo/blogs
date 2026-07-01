@@ -8,7 +8,6 @@
   --rp-c-brand-lighter: #ff7524;
   --rp-c-brand-tint: rgba(255, 94, 0, 0.07);
 
-  --rp-page-grid-color: color-mix(in srgb, var(--rp-c-divider-light) 35%, transparent);
   --rp-page-grid-size: 16px;
 
   --rp-home-hero-secondary-color: #ff5e00;
@@ -19,19 +18,76 @@
     var(--rp-c-brand-dark) 30%,
     var(--rp-home-hero-secondary-color) 100%
   );
+}
+
+/* 亮色模式 */
+html:not(.rp-dark) {
+  --rp-page-grid-color: color-mix(in srgb, var(--rp-c-divider-light) 35%, transparent);
   --rp-home-background-bg:
     radial-gradient(42.12% 56.13% at 100% 0%, rgba(255, 94, 0, 0.1) 0%, transparent 100%),
     radial-gradient(42.01% 79.63% at 52.86% 0%, rgba(255, 117, 36, 0.2) 0%, transparent 100%),
     radial-gradient(79.67% 58.09% at 0% 0%, rgba(255, 112, 77, 0.2) 0%, transparent 100%);
-  --rp-home-feature-bg: linear-gradient(135deg, #fff, #f9f9f980);
+  --rp-home-feature-bg: linear-gradient(145deg, #ffffff 0%, #f7f8fa 100%);
 
-  --home-feature-card-stroke: #8fa1b94d;
-  --home-feature-card-gradient: linear-gradient(135deg, #fff, #f9f9f980);
-  --home-feature-title-color: #0b0c0e;
-  --home-feature-desc-color: #8fa1b9;
+  --home-feature-card-stroke: #d8dee8;
+  --home-feature-card-gradient: linear-gradient(145deg, #ffffff 0%, #f7f8fa 100%);
+  --home-feature-card-shadow: 0 8px 24px rgba(15, 23, 42, 0.06);
+  --home-feature-title-color: #111827;
+  --home-feature-desc-color: #6b7280;
   --home-feature-url-color: #f93920;
-
   --home-features-intro-color: #6b7075;
+
+  --login-overlay-bg: rgba(17, 24, 39, 0.42);
+  --login-modal-bg: #ffffff;
+  --login-modal-border: #e5e7eb;
+  --login-modal-shadow: 0 24px 64px rgba(15, 23, 42, 0.16);
+  --login-input-bg: #ffffff;
+  --login-input-readonly-bg: #f3f4f6;
+  --login-input-border: #d1d5db;
+  --login-label-color: #4b5563;
+  --login-cancel-border: #d1d5db;
+  --login-cancel-color: #374151;
+  --login-cancel-hover-bg: #f9fafb;
+
+  --home-callout-warning-bg: #fffbeb;
+  --home-callout-warning-border: #fcd34d;
+  --home-callout-warning-title: #b45309;
+  --home-callout-warning-text: #78350f;
+}
+
+/* 暗色模式 */
+html.rp-dark {
+  --rp-page-grid-color: color-mix(in srgb, var(--rp-c-divider-light) 22%, transparent);
+  --rp-home-background-bg:
+    radial-gradient(42.12% 56.13% at 100% 0%, rgba(255, 94, 0, 0.14) 0%, transparent 100%),
+    radial-gradient(42.01% 79.63% at 52.86% 0%, rgba(255, 117, 36, 0.08) 0%, transparent 100%),
+    radial-gradient(79.67% 58.09% at 0% 0%, rgba(255, 112, 77, 0.1) 0%, transparent 100%);
+  --rp-home-feature-bg: linear-gradient(145deg, #1c1f26 0%, #16181d 100%);
+
+  --home-feature-card-stroke: rgba(143, 161, 185, 0.22);
+  --home-feature-card-gradient: linear-gradient(145deg, #1f232b 0%, #181b22 100%);
+  --home-feature-card-shadow: 0 12px 36px rgba(0, 0, 0, 0.42);
+  --home-feature-title-color: #f3f4f6;
+  --home-feature-desc-color: #9aa3b2;
+  --home-feature-url-color: #ff8a5c;
+  --home-features-intro-color: #c6cacd;
+
+  --login-overlay-bg: rgba(0, 0, 0, 0.72);
+  --login-modal-bg: linear-gradient(160deg, #23272f 0%, #1a1d24 100%);
+  --login-modal-border: rgba(143, 161, 185, 0.28);
+  --login-modal-shadow: 0 28px 72px rgba(0, 0, 0, 0.55);
+  --login-input-bg: #14171d;
+  --login-input-readonly-bg: #1b1f27;
+  --login-input-border: rgba(143, 161, 185, 0.28);
+  --login-label-color: #9aa3b2;
+  --login-cancel-border: rgba(143, 161, 185, 0.35);
+  --login-cancel-color: #d1d5db;
+  --login-cancel-hover-bg: rgba(255, 255, 255, 0.04);
+
+  --home-callout-warning-bg: rgba(255, 197, 23, 0.1);
+  --home-callout-warning-border: rgba(255, 197, 23, 0.35);
+  --home-callout-warning-title: #f5c842;
+  --home-callout-warning-text: #e8eaed;
 }
 
 body::before {
@@ -61,17 +117,43 @@ body::before {
   width: 220px;
 }
 
-:where(html.rp-dark) {
-  --rp-page-grid-color: color-mix(in srgb, var(--rp-c-divider-light) 28%, transparent);
-  --rp-home-background-bg:
-    radial-gradient(42.12% 56.13% at 100% 0%, rgba(12, 29, 72, 0.55) 0%, transparent 100%),
-    radial-gradient(55.81% 87.78% at 48.37% 0%, rgba(0, 0, 0, 0.45) 0%, transparent 89.55%),
-    radial-gradient(122.65% 88.24% at 0% 0%, rgba(52, 38, 138, 0.5) 0%, transparent 100%);
-  --rp-home-feature-bg: linear-gradient(135deg, #fff0, #ffffff08);
-  --home-feature-card-stroke: #23272f;
-  --home-feature-card-gradient: linear-gradient(135deg, #fff0, #ffffff08);
-  --home-feature-title-color: #fff;
-  --home-feature-desc-color: #8fa1b9;
-  --home-feature-url-color: #ff704d;
-  --home-features-intro-color: #c6cacd;
+.rp-home-hero__actions .rp-button {
+  cursor: pointer;
+  border: none;
+  text-decoration: none;
+  transition:
+    transform 0.2s ease-out,
+    box-shadow 0.2s ease-out,
+    opacity 0.2s ease-out,
+    background-color 0.2s ease-out;
+}
+
+.rp-home-hero__actions .rp-button--brand {
+  box-shadow: 0 8px 24px color-mix(in srgb, var(--rp-c-brand) 30%, transparent);
+}
+
+.rp-home-hero__actions .rp-button--brand:hover {
+  opacity: 1;
+  box-shadow: 0 12px 32px color-mix(in srgb, var(--rp-c-brand) 40%, transparent);
+  transform: translateY(-2px);
+}
+
+.rp-home-hero__actions .rp-button--brand:active {
+  box-shadow: 0 4px 14px color-mix(in srgb, var(--rp-c-brand) 24%, transparent);
+  transform: translateY(0) scale(0.98);
+}
+
+.rp-home-hero__actions .rp-button--brand:focus-visible {
+  outline: 2px solid var(--rp-c-brand);
+  outline-offset: 3px;
+}
+
+.rp-home-hero__actions .rp-button--alt:hover {
+  opacity: 1;
+  border-color: var(--rp-c-brand);
+  transform: translateY(-1px);
+}
+
+.rp-home-hero__actions .rp-button--alt:active {
+  transform: translateY(0) scale(0.98);
 }
