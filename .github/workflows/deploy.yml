@@ -38,8 +38,8 @@ jobs:
           cd dist
           git init
           git add .
-          git config --local user.email "352671309@qq.com"
-          git config --local user.name "Ellis"
+          git config --local user.email "xxoo@outlook.com"
+          git config --local user.name "Tiantian"
           git config --local init.defaultBranch main
           git commit -am 'deploy'
 
