@@ -1,5 +1,5 @@
 name: rspress-deploy
-run-name: Github Actions Deploy
+run-name: Blogs Deploy
 on:
   push:
     branches: ['main']
