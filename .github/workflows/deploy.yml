@@ -28,8 +28,8 @@ jobs:
 
       - name: Check deploy token
         run: |
-          if [ -z "${{ secrets.TOKEN }}" ]; then
-            echo "::error::请在仓库 Settings → Secrets and variables → Actions 中添加 TOKEN（PAT，需具备 xSeek-Neo/docs 的 repo 写权限）"
+          if [ -z "${{ secrets.BLOGS_TOKEN }}" ]; then
+            echo "::error::请在仓库 Settings → Secrets and variables → Actions 中添加 BLOGS_TOKEN（PAT，需具备 xSeek-Neo/docs 的 repo 写权限）"
             exit 1
           fi
 
@@ -46,7 +46,7 @@ jobs:
       - name: Force push to destination branch
         uses: ad-m/github-push-action@v0.8.0
         with:
-          github_token: ${{ secrets.TOKEN }}
+          github_token: ${{ secrets.BLOGS_TOKEN }}
           branch: main
           force: true
           repository: xSeek-Neo/docs
