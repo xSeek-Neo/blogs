@@ -21,6 +21,9 @@ importers:
       '@commitlint/config-conventional':
         specifier: ^21.2.0
         version: 21.2.0
+      '@commitlint/types':
+        specifier: ^21.2.0
+        version: 21.2.0
       '@rslint/core':
         specifier: ^0.6.4
         version: 0.6.4(jiti@2.6.1)

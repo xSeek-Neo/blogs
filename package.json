@@ -23,6 +23,7 @@
   "devDependencies": {
     "@commitlint/cli": "^21.2.0",
     "@commitlint/config-conventional": "^21.2.0",
+    "@commitlint/types": "^21.2.0",
     "@rslint/core": "^0.6.4",
     "@types/node": "^24.0.0",
     "@types/react": "^19.2.17",
