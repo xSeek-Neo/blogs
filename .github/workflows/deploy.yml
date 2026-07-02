@@ -1,5 +1,5 @@
 name: rspress-deploy
-run-name: Blogs Deploy
+run-name: 部署博客到 docs
 on:
   push:
     branches: ['main']
