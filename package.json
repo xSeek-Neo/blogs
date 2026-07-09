@@ -7,7 +7,7 @@
   "scripts": {
     "dev": "pnpm run clean:cache && rspress dev",
     "build": "rspress build",
-    "deploy": "bash scripts/deploy.sh",
+    "deploy": "bash shells/deploy.sh",
     "format": "oxfmt .",
     "format:check": "oxfmt . --check",
     "lint": "rslint .",
